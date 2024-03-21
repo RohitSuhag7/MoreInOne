@@ -33,11 +33,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -77,8 +77,7 @@ dependencies {
     // Room
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.compiler)
-    // To use Kotlin annotation processing tool (kapt)
-    kapt(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
     // To use Kotlin Symbol Processing (KSP)
     ksp(libs.androidx.room.compiler)
 
@@ -87,7 +86,7 @@ dependencies {
     kapt(libs.hilt.compiler)
 
     // Navigation
-    implementation(libs.androidx.navigation.compose)
+//    implementation(libs.androidx.navigation.compose)
 
     // Lifecycle Compose
     implementation(libs.androidx.lifecycle.runtime.compose)
