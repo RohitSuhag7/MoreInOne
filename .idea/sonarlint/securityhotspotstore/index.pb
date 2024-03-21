@@ -1,0 +1,23 @@
+
+g
+7app/src/main/java/org/example/moreinone/MainActivity.kt,7/9/79b1181782d644a0fe479860f1d089809324be16
+r
+Bapp/src/main/java/org/example/moreinone/ui/theme/TaskListScreen.kt,c/0/c04e007d42e68c0c5aef50b71a5eeef2ba7238ac
+i
+9app/src/main/java/org/example/moreinone/ui/theme/Color.kt,4/1/4129a5b106b6af86af4150655e167ea20524ea1f
+i
+9app/src/main/java/org/example/moreinone/ui/theme/Theme.kt,c/9/c93374f42cd1ba014078958fa73a0957b25d6ea2
+h
+8app/src/main/java/org/example/moreinone/ui/theme/Type.kt,a/e/ae940838bcb11254324167ac083be67fb70b4963
+D
+app/build.gradle.kts,d/2/d2a4383452aad84a18429a5844d31330a012a9e6
+@
+build.gradle.kts,d/b/dbcff70658daf80b53ce624f6adcaa529df5ed8d
+I
+gradle/libs.versions.toml,d/7/d7595319a0658be6f1ed500ad590d42e4b28bc4f
+h
+8app/src/main/java/org/example/moreinone/MyApplication.kt,d/b/dbc37e21f7371bc2b97eb904af99ed625b5db443
+P
+ app/src/main/AndroidManifest.xml,8/c/8c55c3ccc257e5907959013f99656e4c8ec3903e
+g
+7app/src/main/java/org/example/moreinone/di/AppModule.kt,1/d/1dbd889e99d9aca245d180df00380b1a5549a98a
