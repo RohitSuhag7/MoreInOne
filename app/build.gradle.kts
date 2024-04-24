@@ -2,7 +2,6 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.devtoolsKSP)
-    id("kotlin-kapt")
     alias(libs.plugins.hiltAndroid)
 }
 
@@ -78,16 +77,14 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
-    // To use Kotlin Symbol Processing (KSP)
     ksp(libs.androidx.room.compiler)
 
     // Hilt
     implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 
     // Navigation
-//    implementation(libs.androidx.navigation.compose)
-
+    implementation(libs.androidx.navigation.compose)
     // Lifecycle Compose
     implementation(libs.androidx.lifecycle.runtime.compose)
 }

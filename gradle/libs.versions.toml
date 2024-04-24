@@ -11,7 +11,7 @@ composeBom = "2024.02.02"
 devtools = "1.9.10-1.0.13"
 roomRuntime = "2.6.1"
 hiltAndroid = "2.51"
-navigationCompose = "2.77"
+navigationCompose = "2.7.7"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }

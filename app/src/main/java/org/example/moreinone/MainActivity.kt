@@ -10,9 +10,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import org.example.moreinone.navigation.Navigate
+import org.example.moreinone.navigation.Screens
 import org.example.moreinone.ui.theme.MoreInOneTheme
-import org.example.moreinone.ui.theme.TaskListScreen
+import org.example.moreinone.ui.TaskListScreen
+import org.example.moreinone.utils.Constants
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -25,25 +29,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    TaskListScreen()
+                    Navigate()
                 }
             }
         }
-    }
-}
-
-@Composable
-fun MoreInOne(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun GreetingPreview() {
-    MoreInOneTheme {
-        TaskListScreen()
     }
 }

@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TodoViewModel @Inject constructor(private val todoRepository: TodoRepository): ViewModel() {
 
-    var todo by mutableStateOf(Todo(0, "", "", "",false))
+    private var todo by mutableStateOf(Todo(0, "", "", "",false))
 
     val getAllTodos = todoRepository.getAllTodos()
 

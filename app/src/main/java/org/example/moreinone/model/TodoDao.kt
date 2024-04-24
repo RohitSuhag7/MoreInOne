@@ -20,9 +20,9 @@ interface TodoDao {
     @Delete
     suspend fun deleteTodo(todo: Todo)
 
-    @Query("SELECT * FROM Todo WHERE id = :id")
+    @Query("SELECT * FROM TODO_TABLE WHERE id = :id")
     suspend fun getTodoById(id: Int): Todo
 
-    @Query("SELECT * FROM Todo")
+    @Query("SELECT * FROM TODO_TABLE")
     fun getAllTodos(): Flow<List<Todo>>
 }
