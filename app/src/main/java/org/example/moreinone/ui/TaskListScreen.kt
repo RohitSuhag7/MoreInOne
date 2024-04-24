@@ -16,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import org.example.moreinone.navigation.Screens
-import org.example.moreinone.utils.Constants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

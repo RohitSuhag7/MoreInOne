@@ -14,7 +14,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import org.example.moreinone.R
 import org.example.moreinone.common.SimpleText
 import org.example.moreinone.common.SimpleTextField
 
@@ -30,11 +32,11 @@ fun TaskCreateScreen() {
                     titleContentColor = MaterialTheme.colorScheme.primary
                 ))
         }
-    ) {
+    ) {paddingValues ->
         Column(modifier = Modifier
-            .padding(it)
+            .padding(paddingValues)
             .padding(horizontal = 16.dp, vertical = 16.dp)) {
-            SimpleText(text = "Task Name")
+            SimpleText(text = stringResource(id = R.string.task_name))
             SimpleTextField(textValue = text, onValueChanges = { text = it}, "e.g. GYM")
         }
     }
