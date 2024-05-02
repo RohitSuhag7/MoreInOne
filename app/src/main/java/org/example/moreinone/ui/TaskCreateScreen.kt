@@ -5,8 +5,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import org.example.moreinone.R
 import org.example.moreinone.common.SimpleText
 import org.example.moreinone.common.SimpleTextField
+import org.example.moreinone.utils.DisablePastDates
 import org.example.moreinone.utils.convertLongToTime
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,7 +43,8 @@ fun TaskCreateScreen() {
     var taskDesc by remember { mutableStateOf("") }
     var taskDate by remember { mutableStateOf("") }
     val openDialog = remember { mutableStateOf(false) }
-    val datePickerState = rememberDatePickerState()
+    val datePickerState = rememberDatePickerState(selectableDates = DisablePastDates)
+    val checkedState = remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -54,8 +59,9 @@ fun TaskCreateScreen() {
     ) { paddingValues ->
         Column(
             modifier = Modifier
+                .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = 16.dp, vertical = 16.dp)
+                .padding(horizontal = 24.dp, vertical = 50.dp)
         ) {
             // Task Name
             SimpleText(text = stringResource(R.string.task_name))
@@ -79,7 +85,9 @@ fun TaskCreateScreen() {
 
             // Task Date
             SimpleText(text = stringResource(R.string.task_date))
-            Row(modifier = Modifier.fillMaxWidth()) {
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 SimpleTextField(
                     textValue = taskDate, onValueChanges = { taskDesc = taskDate },
                     stringResource(R.string.select_date_from_calendar),
@@ -121,6 +129,36 @@ fun TaskCreateScreen() {
                         DatePicker(state = datePickerState)
                     }
                 }
+            }
+
+            // Task Important
+            Row(
+                modifier = Modifier
+                    .padding(top = 16.dp, start = 50.dp)
+            ) {
+                SimpleText(text = stringResource(R.string.important))
+                Checkbox(
+                    checked = checkedState.value,
+                    onCheckedChange = {
+                        checkedState.value = it
+                    },
+                    modifier = Modifier
+                        .padding(start = 50.dp)
+                        .size(size = 20.dp)
+                )
+            }
+
+            // Create Task Button
+            ElevatedButton(
+                onClick = { /*TODO*/ },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 100.dp)
+            ) {
+                SimpleText(
+                    text = stringResource(R.string.create),
+                    textStyle = MaterialTheme.typography.titleLarge
+                )
             }
         }
     }

@@ -10,7 +10,7 @@ fun SimpleTextField(
     textValue: String,
     onValueChanges: (String) -> Unit,
     hintText: String = "",
-    modifier: Modifier = Modifier,
+    modifier: Modifier,
     enabled: Boolean = true
 ) {
     TextField(

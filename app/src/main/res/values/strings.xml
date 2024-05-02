@@ -6,4 +6,6 @@
     <string name="enter_your_task_name_here">Enter your task name here</string>
     <string name="enter_your_task_desc_here">Enter your task description here</string>
     <string name="select_date_from_calendar">Select task date</string>
+    <string name="important">Important</string>
+    <string name="create">Create</string>
 </resources>
