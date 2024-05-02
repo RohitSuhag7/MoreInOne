@@ -13,9 +13,9 @@ import org.example.moreinone.repository.TodoRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class TodoViewModel @Inject constructor(private val todoRepository: TodoRepository): ViewModel() {
+class TodoViewModel @Inject constructor(private val todoRepository: TodoRepository) : ViewModel() {
 
-    private var todo by mutableStateOf(Todo(0, "", "", "",false))
+    private var todo by mutableStateOf(Todo(0, "", "", "", "", false))
 
     val getAllTodos = todoRepository.getAllTodos()
 
@@ -55,7 +55,7 @@ class TodoViewModel @Inject constructor(private val todoRepository: TodoReposito
     }
 
     fun updateTask(newValue: String) {
-        todo = todo.copy(task = newValue)
+        todo = todo.copy(taskName = newValue)
     }
 
     fun updateIsImportant(newValue: Boolean) {

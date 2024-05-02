@@ -1,5 +1,7 @@
 package org.example.moreinone.ui
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,24 +29,49 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import org.example.moreinone.R
 import org.example.moreinone.common.SimpleText
 import org.example.moreinone.common.SimpleTextField
+import org.example.moreinone.model.Todo
+import org.example.moreinone.navigation.Screens
 import org.example.moreinone.utils.DisablePastDates
 import org.example.moreinone.utils.convertLongToTime
+import org.example.moreinone.viewmodel.TodoViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskCreateScreen() {
+fun TaskCreateScreen(navController: NavController) {
     var taskName by remember { mutableStateOf("") }
     var taskDesc by remember { mutableStateOf("") }
     var taskDate by remember { mutableStateOf("") }
     val openDialog = remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState(selectableDates = DisablePastDates)
     val checkedState = remember { mutableStateOf(false) }
+
+    val todoViewModel: TodoViewModel = hiltViewModel()
+    val mContext = LocalContext.current
+
+    fun validate() {
+        if (taskName.isNotEmpty() || taskDesc.isNotEmpty() || taskDate.isNotEmpty()) {
+            todoViewModel.insertTodo(
+                Todo(
+                    taskName = taskName,
+                    taskDesc = taskDesc,
+                    createdOn = taskDate,
+                    isImportant = checkedState.value
+                )
+            )
+            navController.navigate(Screens.TaskListScreen.route)
+        } else {
+            Toast.makeText(mContext, "Please enter valid inputs", Toast.LENGTH_LONG).show()
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -150,7 +177,9 @@ fun TaskCreateScreen() {
 
             // Create Task Button
             ElevatedButton(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    validate()
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 100.dp)

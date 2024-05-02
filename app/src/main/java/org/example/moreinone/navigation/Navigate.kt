@@ -16,7 +16,7 @@ fun Navigate() {
             TaskListScreen(navController)
         }
         composable(route = Screens.TaskCreateScreen.route) {
-            TaskCreateScreen()
+            TaskCreateScreen(navController)
         }
     }
 }
