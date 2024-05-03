@@ -61,7 +61,9 @@ fun TaskListScreen(navController: NavController) {
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { navController.navigate(Screens.TaskCreateScreen.route) },
+                onClick = {
+                    navController.navigate(Screens.TaskCreateScreen.route)
+                },
                 content = {
                     Icon(
                         imageVector = Icons.Filled.Add,
@@ -72,24 +74,28 @@ fun TaskListScreen(navController: NavController) {
         },
         content = { paddingValues ->
             Column(modifier = Modifier.padding(paddingValues)) {
-                TodoLazyColumn(todo = getAllTodos, todoViewModel)
+                TodoLazyColumn(
+                    todo = getAllTodos,
+                    todoViewModel = todoViewModel,
+                    navController = navController
+                )
             }
         }
     )
 }
 
 @Composable
-fun TodoLazyColumn(todo: List<Todo>, todoViewModel: TodoViewModel) {
+fun TodoLazyColumn(todo: List<Todo>, todoViewModel: TodoViewModel, navController: NavController) {
     LazyColumn {
         items(todo.size) { index ->
-            ListCardView(todo[index], todoViewModel)
+            ListCardView(todo[index], todoViewModel, navController)
         }
     }
 }
 
 @Composable
-fun ListCardView(todo: Todo, todoViewModel: TodoViewModel) {
-    var taskStatusState by remember { mutableStateOf(false) }
+fun ListCardView(todo: Todo, todoViewModel: TodoViewModel, navController: NavController) {
+    var taskStatusState by remember { mutableStateOf(todo.status ?: false) }
 
     Card(
         shape = RoundedCornerShape(8.dp),
@@ -116,6 +122,8 @@ fun ListCardView(todo: Todo, todoViewModel: TodoViewModel) {
                     ),
                     maxLines = 1
                 )
+                todo.status = taskStatusState
+                todoViewModel.insertTodo(todo)
             } else {
                 SimpleText(
                     modifier = Modifier.weight(1f),
@@ -125,8 +133,12 @@ fun ListCardView(todo: Todo, todoViewModel: TodoViewModel) {
                     ),
                     maxLines = 1
                 )
+                todo.status = taskStatusState
+                todoViewModel.insertTodo(todo)
             }
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = {
+                navController.navigate(Screens.TaskCreateScreen.route)
+            }) {
                 Icon(
                     imageVector = Icons.Filled.Edit,
                     contentDescription = "Edit Icon",
