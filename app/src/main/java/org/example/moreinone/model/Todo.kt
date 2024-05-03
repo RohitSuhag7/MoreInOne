@@ -10,7 +10,7 @@ data class Todo(
     val id: Int = 0,
     val taskName: String? = "",
     val taskDesc: String? = "",
-    val status: String? = "",
     val createdOn: String? = "",
     val isImportant: Boolean? = false,
+    val status: Boolean? = false,
 )

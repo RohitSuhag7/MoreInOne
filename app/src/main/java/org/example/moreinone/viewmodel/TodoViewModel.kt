@@ -15,11 +15,11 @@ import javax.inject.Inject
 @HiltViewModel
 class TodoViewModel @Inject constructor(private val todoRepository: TodoRepository) : ViewModel() {
 
-    private var todo by mutableStateOf(Todo(0, "", "", "", "", false))
-
-    val getAllTodos = todoRepository.getAllTodos()
+    private var todo by mutableStateOf(Todo(0, "", "", "", false, false))
 
     private var deletedTodo: Todo? = null
+
+    val getAllTodos = todoRepository.getAllTodos()
 
     fun insertTodo(todo: Todo) {
         viewModelScope.launch(Dispatchers.IO) {

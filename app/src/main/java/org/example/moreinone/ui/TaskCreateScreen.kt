@@ -1,6 +1,5 @@
 package org.example.moreinone.ui
 
-import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -52,7 +51,7 @@ fun TaskCreateScreen(navController: NavController) {
     var taskDate by remember { mutableStateOf("") }
     val openDialog = remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState(selectableDates = DisablePastDates)
-    val checkedState = remember { mutableStateOf(false) }
+    var checkedState by remember { mutableStateOf(false) }
 
     val todoViewModel: TodoViewModel = hiltViewModel()
     val mContext = LocalContext.current
@@ -64,7 +63,7 @@ fun TaskCreateScreen(navController: NavController) {
                     taskName = taskName,
                     taskDesc = taskDesc,
                     createdOn = taskDate,
-                    isImportant = checkedState.value
+                    isImportant = checkedState
                 )
             )
             navController.navigate(Screens.TaskListScreen.route)
@@ -165,9 +164,9 @@ fun TaskCreateScreen(navController: NavController) {
             ) {
                 SimpleText(text = stringResource(R.string.important))
                 Checkbox(
-                    checked = checkedState.value,
+                    checked = checkedState,
                     onCheckedChange = {
-                        checkedState.value = it
+                        checkedState = it
                     },
                     modifier = Modifier
                         .padding(start = 50.dp)
