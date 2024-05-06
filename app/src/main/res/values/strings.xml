@@ -8,4 +8,7 @@
     <string name="select_date_from_calendar">Select task date</string>
     <string name="important">Important</string>
     <string name="create">Create</string>
+    <string name="no_tasks">No Tasks!</string>
+    <string name="create_task">Create Task</string>
+    <string name="please_enter_valid_data">Please enter valid data!</string>
 </resources>

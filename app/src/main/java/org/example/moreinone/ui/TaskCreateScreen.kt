@@ -1,12 +1,13 @@
 package org.example.moreinone.ui
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
@@ -37,6 +38,7 @@ import androidx.navigation.NavController
 import org.example.moreinone.R
 import org.example.moreinone.common.SimpleText
 import org.example.moreinone.common.SimpleTextField
+import org.example.moreinone.common.toastMessage
 import org.example.moreinone.model.Todo
 import org.example.moreinone.navigation.Screens
 import org.example.moreinone.utils.DisablePastDates
@@ -68,18 +70,30 @@ fun TaskCreateScreen(navController: NavController) {
             )
             navController.navigate(Screens.TaskListScreen.route)
         } else {
-            Toast.makeText(mContext, "Please enter valid inputs", Toast.LENGTH_LONG).show()
+            toastMessage(
+                mContext,
+                mContext.getString(R.string.please_enter_valid_data)
+            )
         }
     }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Create Task") },
+                title = { Text(text = stringResource(R.string.create_task)) },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.primary
-                )
+                ),
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
             )
         }
     ) { paddingValues ->

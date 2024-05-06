@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
@@ -31,12 +32,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import org.example.moreinone.R
+import org.example.moreinone.common.EmptyScreen
 import org.example.moreinone.common.SimpleText
 import org.example.moreinone.model.Todo
 import org.example.moreinone.navigation.Screens
@@ -73,28 +77,27 @@ fun TaskListScreen(navController: NavController) {
             )
         },
         content = { paddingValues ->
-            Column(modifier = Modifier.padding(paddingValues)) {
-                TodoLazyColumn(
-                    todo = getAllTodos,
-                    todoViewModel = todoViewModel,
-                    navController = navController
+            if (getAllTodos.isEmpty()) {
+                EmptyScreen(
+                    text = stringResource(R.string.no_tasks),
+                    paddingValues = paddingValues
                 )
+            } else {
+                Column(modifier = Modifier.padding(paddingValues)) {
+                    LazyColumn {
+                        items(getAllTodos.size) { index ->
+                            ListCardView(getAllTodos[index], todoViewModel, navController)
+                        }
+                    }
+                }
             }
         }
     )
 }
 
 @Composable
-fun TodoLazyColumn(todo: List<Todo>, todoViewModel: TodoViewModel, navController: NavController) {
-    LazyColumn {
-        items(todo.size) { index ->
-            ListCardView(todo[index], todoViewModel, navController)
-        }
-    }
-}
-
-@Composable
 fun ListCardView(todo: Todo, todoViewModel: TodoViewModel, navController: NavController) {
+
     var taskStatusState by remember { mutableStateOf(todo.status ?: false) }
 
     Card(
@@ -136,6 +139,12 @@ fun ListCardView(todo: Todo, todoViewModel: TodoViewModel, navController: NavCon
                 todo.status = taskStatusState
                 todoViewModel.insertTodo(todo)
             }
+            if (todo.isImportant == true) {
+                Icon(
+                    imageVector = Icons.Filled.Star,
+                    contentDescription = null
+                )
+            }
             IconButton(onClick = {
                 navController.navigate(Screens.TaskCreateScreen.route)
             }) {
@@ -146,7 +155,7 @@ fun ListCardView(todo: Todo, todoViewModel: TodoViewModel, navController: NavCon
                 )
             }
             IconButton(onClick = {
-                todoViewModel.deleteTodo(todo)
+                todoViewModel.deleteTodo(todo = todo)
             }) {
                 Icon(
                     imageVector = Icons.Filled.Delete,
