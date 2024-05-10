@@ -89,4 +89,7 @@ dependencies {
 
     // Lifecycle Compose
     implementation(libs.androidx.lifecycle.runtime.compose)
+
+    // Gson
+    implementation(libs.gson)
 }

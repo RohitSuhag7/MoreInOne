@@ -39,11 +39,13 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.google.gson.Gson
 import org.example.moreinone.R
 import org.example.moreinone.common.EmptyScreen
 import org.example.moreinone.common.SimpleText
 import org.example.moreinone.model.Todo
 import org.example.moreinone.navigation.Screens
+import org.example.moreinone.utils.Constants.TODO_NAV_KEY
 import org.example.moreinone.viewmodel.TodoViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -146,7 +148,8 @@ fun ListCardView(todo: Todo, todoViewModel: TodoViewModel, navController: NavCon
                 )
             }
             IconButton(onClick = {
-                navController.navigate(Screens.TaskCreateScreen.route)
+                val todoJsonString = Gson().toJson(todo)
+                navController.navigate(Screens.TaskCreateScreen.route + "?$TODO_NAV_KEY=${todoJsonString}")
             }) {
                 Icon(
                     imageVector = Icons.Filled.Edit,

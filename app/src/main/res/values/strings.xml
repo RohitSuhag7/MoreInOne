@@ -11,4 +11,6 @@
     <string name="no_tasks">No Tasks!</string>
     <string name="create_task">Create Task</string>
     <string name="please_enter_valid_data">Please enter valid data!</string>
+    <string name="no_selection">No Selection</string>
+    <string name="okay">Okay</string>
 </resources>

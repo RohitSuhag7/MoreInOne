@@ -35,6 +35,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.google.gson.Gson
 import org.example.moreinone.R
 import org.example.moreinone.common.SimpleText
 import org.example.moreinone.common.SimpleTextField
@@ -47,7 +48,7 @@ import org.example.moreinone.viewmodel.TodoViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskCreateScreen(navController: NavController) {
+fun TaskCreateScreen(navController: NavController, todoJsonString: String?) { //name: String?, desc: String?, getDate: String?
     var taskName by remember { mutableStateOf("") }
     var taskDesc by remember { mutableStateOf("") }
     var taskDate by remember { mutableStateOf("") }
@@ -97,6 +98,9 @@ fun TaskCreateScreen(navController: NavController) {
             )
         }
     ) { paddingValues ->
+
+        val todo = Gson().fromJson(todoJsonString, Todo::class.java)
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -106,7 +110,8 @@ fun TaskCreateScreen(navController: NavController) {
             // Task Name
             SimpleText(text = stringResource(R.string.task_name))
             SimpleTextField(
-                textValue = taskName, onValueChanges = { taskName = it },
+                textValue = todo?.taskName ?: taskName,
+                onValueChanges = { taskName = it },
                 stringResource(R.string.enter_your_task_name_here),
                 Modifier
                     .fillMaxWidth()
@@ -116,7 +121,8 @@ fun TaskCreateScreen(navController: NavController) {
             // Task Description
             SimpleText(text = stringResource(R.string.task_desc))
             SimpleTextField(
-                textValue = taskDesc, onValueChanges = { taskDesc = it },
+                textValue = todo?.taskDesc ?: taskDesc,
+                onValueChanges = { taskDesc = it },
                 stringResource(R.string.enter_your_task_desc_here),
                 Modifier
                     .fillMaxWidth()
@@ -129,7 +135,8 @@ fun TaskCreateScreen(navController: NavController) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 SimpleTextField(
-                    textValue = taskDate, onValueChanges = { taskDesc = taskDate },
+                    textValue = todo?.createdOn ?: taskDate,
+                    onValueChanges = { taskDesc = taskDate },
                     stringResource(R.string.select_date_from_calendar),
                     Modifier
                         .padding(top = 8.dp, bottom = 24.dp, start = 8.dp, end = 8.dp)
@@ -144,7 +151,7 @@ fun TaskCreateScreen(navController: NavController) {
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.calendar),
-                        contentDescription = "DatePicker",
+                        contentDescription = null,
                         modifier = Modifier.fillMaxSize(),
                         tint = Color.Unspecified,
                     )
@@ -157,13 +164,13 @@ fun TaskCreateScreen(navController: NavController) {
                         confirmButton = {
                             TextButton(onClick = {
                                 openDialog.value = false
-                                var date = "No Selection"
+                                var date = mContext.getString(R.string.no_selection)
                                 if (datePickerState.selectedDateMillis != null) {
                                     date = convertLongToTime(datePickerState.selectedDateMillis!!)
                                 }
                                 taskDate = date
                             }) {
-                                SimpleText(text = "Okay")
+                                SimpleText(text = stringResource(R.string.okay))
                             }
                         }) {
                         DatePicker(state = datePickerState)
