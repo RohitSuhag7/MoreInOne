@@ -48,13 +48,17 @@ import org.example.moreinone.viewmodel.TodoViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskCreateScreen(navController: NavController, todoJsonString: String?) { //name: String?, desc: String?, getDate: String?
-    var taskName by remember { mutableStateOf("") }
-    var taskDesc by remember { mutableStateOf("") }
-    var taskDate by remember { mutableStateOf("") }
+fun TaskCreateScreen(navController: NavController, todoJsonString: String?) {
+
+    val todo = Gson().fromJson(todoJsonString, Todo::class.java)
+
+    var taskName by remember { mutableStateOf(todo?.taskName ?: "") }
+    var taskDesc by remember { mutableStateOf(todo?.taskDesc ?: "") }
+    var taskDate by remember { mutableStateOf(todo?.createdOn ?: "") }
+    var checkedState by remember { mutableStateOf(todo?.isImportant ?: false) }
+
     val openDialog = remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState(selectableDates = DisablePastDates)
-    var checkedState by remember { mutableStateOf(false) }
 
     val todoViewModel: TodoViewModel = hiltViewModel()
     val mContext = LocalContext.current
@@ -81,7 +85,14 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) { //
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = stringResource(R.string.create_task)) },
+                title = {
+                    val toolbarText =
+                        if (taskName.isEmpty())
+                            stringResource(R.string.create_task)
+                        else
+                            stringResource(R.string.update_task)
+                    Text(text = toolbarText)
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.primary
@@ -99,8 +110,6 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) { //
         }
     ) { paddingValues ->
 
-        val todo = Gson().fromJson(todoJsonString, Todo::class.java)
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -110,7 +119,7 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) { //
             // Task Name
             SimpleText(text = stringResource(R.string.task_name))
             SimpleTextField(
-                textValue = todo?.taskName ?: taskName,
+                textValue = taskName,
                 onValueChanges = { taskName = it },
                 stringResource(R.string.enter_your_task_name_here),
                 Modifier
@@ -121,7 +130,7 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) { //
             // Task Description
             SimpleText(text = stringResource(R.string.task_desc))
             SimpleTextField(
-                textValue = todo?.taskDesc ?: taskDesc,
+                textValue = taskDesc,
                 onValueChanges = { taskDesc = it },
                 stringResource(R.string.enter_your_task_desc_here),
                 Modifier
@@ -135,7 +144,7 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) { //
                 modifier = Modifier.fillMaxWidth()
             ) {
                 SimpleTextField(
-                    textValue = todo?.createdOn ?: taskDate,
+                    textValue = taskDate,
                     onValueChanges = { taskDesc = taskDate },
                     stringResource(R.string.select_date_from_calendar),
                     Modifier
@@ -204,8 +213,13 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) { //
                     .fillMaxWidth()
                     .padding(top = 100.dp)
             ) {
+                val buttonText =
+                    if (taskName.isEmpty())
+                        stringResource(R.string.create)
+                    else
+                        stringResource(R.string.update)
                 SimpleText(
-                    text = stringResource(R.string.create),
+                    text = buttonText,
                     textStyle = MaterialTheme.typography.titleLarge
                 )
             }
