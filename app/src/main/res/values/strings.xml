@@ -13,4 +13,7 @@
     <string name="please_enter_valid_data">Please enter valid data!</string>
     <string name="no_selection">No Selection</string>
     <string name="okay">Okay</string>
+    <string name="todo_list">Todo List</string>
+    <string name="undo">UNDO</string>
+    <string name="deleted">Deleted \"%1$s\"</string>
 </resources>

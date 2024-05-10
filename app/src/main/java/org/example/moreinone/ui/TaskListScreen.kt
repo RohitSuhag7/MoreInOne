@@ -20,6 +20,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -28,10 +30,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -43,6 +47,7 @@ import com.google.gson.Gson
 import org.example.moreinone.R
 import org.example.moreinone.common.EmptyScreen
 import org.example.moreinone.common.SimpleText
+import org.example.moreinone.common.mySnackbar
 import org.example.moreinone.model.Todo
 import org.example.moreinone.navigation.Screens
 import org.example.moreinone.utils.Constants.TODO_NAV_KEY
@@ -55,10 +60,16 @@ fun TaskListScreen(navController: NavController) {
     val todoViewModel: TodoViewModel = hiltViewModel()
     val getAllTodos: List<Todo> by todoViewModel.getAllTodos.collectAsState(initial = emptyList())
 
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
+    val mContext = LocalContext.current
+
     Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             TopAppBar(
-                title = { Text("Todo List") },
+                title = { Text(stringResource(R.string.todo_list)) },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.primary
@@ -88,7 +99,24 @@ fun TaskListScreen(navController: NavController) {
                 Column(modifier = Modifier.padding(paddingValues)) {
                     LazyColumn {
                         items(getAllTodos.size) { index ->
-                            ListCardView(getAllTodos[index], todoViewModel, navController)
+                            ListCardView(
+                                todo = getAllTodos[index],
+                                todoViewModel = todoViewModel,
+                                navController = navController,
+                                onDelete = {
+                                    todoViewModel.deleteTodo(todo = getAllTodos[index])
+                                    mySnackbar(
+                                        scope = scope,
+                                        snackbarHostState = snackbarHostState,
+                                        msg = mContext.getString(
+                                            R.string.deleted,
+                                            getAllTodos[index].taskName
+                                        ),
+                                        actionLabel = mContext.getString(R.string.undo),
+                                        onAction = { todoViewModel.undoDeletedTodo() }
+                                    )
+                                }
+                            )
                         }
                     }
                 }
@@ -98,7 +126,12 @@ fun TaskListScreen(navController: NavController) {
 }
 
 @Composable
-fun ListCardView(todo: Todo, todoViewModel: TodoViewModel, navController: NavController) {
+fun ListCardView(
+    todo: Todo,
+    todoViewModel: TodoViewModel,
+    navController: NavController,
+    onDelete: () -> Unit,
+) {
 
     var taskStatusState by remember { mutableStateOf(todo.status ?: false) }
 
@@ -158,7 +191,7 @@ fun ListCardView(todo: Todo, todoViewModel: TodoViewModel, navController: NavCon
                 )
             }
             IconButton(onClick = {
-                todoViewModel.deleteTodo(todo = todo)
+                onDelete()
             }) {
                 Icon(
                     imageVector = Icons.Filled.Delete,
