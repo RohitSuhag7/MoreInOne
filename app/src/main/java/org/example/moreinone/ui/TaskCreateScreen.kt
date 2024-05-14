@@ -64,9 +64,10 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) {
     val mContext = LocalContext.current
 
     fun validate() {
-        if (taskName.isNotEmpty() || taskDesc.isNotEmpty() || taskDate.isNotEmpty()) {
+        if (taskName.isNotEmpty() && taskDesc.isNotEmpty() && taskDate.isNotEmpty()) {
             todoViewModel.insertTodo(
                 Todo(
+                    id = todo?.id ?: 0,
                     taskName = taskName,
                     taskDesc = taskDesc,
                     createdOn = taskDate,
@@ -87,7 +88,7 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) {
             TopAppBar(
                 title = {
                     val toolbarText =
-                        if (taskName.isEmpty())
+                        if (todo?.id == null)
                             stringResource(R.string.create_task)
                         else
                             stringResource(R.string.update_task)
@@ -214,7 +215,7 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) {
                     .padding(top = 100.dp)
             ) {
                 val buttonText =
-                    if (taskName.isEmpty())
+                    if (todo?.id == null)
                         stringResource(R.string.create)
                     else
                         stringResource(R.string.update)
