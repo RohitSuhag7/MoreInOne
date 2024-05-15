@@ -11,7 +11,7 @@ fun convertLongToTime(time: Long): String {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-object DisablePastDates: SelectableDates {
+object DisablePastDates : SelectableDates {
     override fun isSelectableDate(utcTimeMillis: Long): Boolean {
         return utcTimeMillis >= System.currentTimeMillis()
     }
