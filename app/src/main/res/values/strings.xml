@@ -18,4 +18,5 @@
     <string name="todo_list">Todo List</string>
     <string name="undo">UNDO</string>
     <string name="deleted">Deleted \"%1$s\"</string>
+    <string name="this_field_is_required">This field is required.</string>
 </resources>
