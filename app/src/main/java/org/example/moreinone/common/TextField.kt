@@ -11,7 +11,9 @@ fun SimpleTextField(
     onValueChanges: (String) -> Unit,
     hintText: String = "",
     modifier: Modifier,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    isError: Boolean = false,
+    supportingText: @Composable () -> Unit,
 ) {
     TextField(
         value = textValue,
@@ -22,6 +24,8 @@ fun SimpleTextField(
             Text(text = hintText)
         },
         modifier = modifier,
-        enabled = enabled
+        enabled = enabled,
+        isError = isError,
+        supportingText = { supportingText() }
     )
 }

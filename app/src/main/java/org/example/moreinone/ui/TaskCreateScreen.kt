@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -63,6 +64,10 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) {
     val todoViewModel: TodoViewModel = hiltViewModel()
     val mContext = LocalContext.current
 
+    var isErrorTaskName by rememberSaveable { mutableStateOf(false) }
+    var isErrorTaskDesc by rememberSaveable { mutableStateOf(false) }
+    var isErrorTaskDate by rememberSaveable { mutableStateOf(false) }
+
     fun validate() {
         if (taskName.isNotEmpty() && taskDesc.isNotEmpty() && taskDate.isNotEmpty()) {
             todoViewModel.insertTodo(
@@ -76,6 +81,10 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) {
             )
             navController.navigate(Screens.TaskListScreen.route)
         } else {
+            isErrorTaskName = taskName.isEmpty()
+            isErrorTaskDesc = taskDesc.isEmpty()
+            isErrorTaskDate = taskDate.isEmpty()
+
             toastMessage(
                 mContext,
                 mContext.getString(R.string.please_enter_valid_data)
@@ -125,7 +134,17 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) {
                 stringResource(R.string.enter_your_task_name_here),
                 Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp, bottom = 24.dp, start = 8.dp, end = 8.dp)
+                    .padding(top = 8.dp, bottom = 24.dp, start = 8.dp, end = 8.dp),
+                isError = isErrorTaskName,
+                supportingText = {
+                    if (isErrorTaskName) {
+                        SimpleText(
+                            text = stringResource(R.string.this_field_is_required),
+                            textStyle = MaterialTheme.typography.labelMedium,
+                            textColor = Color.Red
+                        )
+                    }
+                }
             )
 
             // Task Description
@@ -136,7 +155,17 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) {
                 stringResource(R.string.enter_your_task_desc_here),
                 Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp, bottom = 24.dp, start = 8.dp, end = 8.dp)
+                    .padding(top = 8.dp, bottom = 24.dp, start = 8.dp, end = 8.dp),
+                isError = isErrorTaskDesc,
+                supportingText = {
+                    if (isErrorTaskDesc) {
+                        SimpleText(
+                            text = stringResource(R.string.this_field_is_required),
+                            textStyle = MaterialTheme.typography.labelMedium,
+                            textColor = Color.Red
+                        )
+                    }
+                }
             )
 
             // Task Date
@@ -149,7 +178,17 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) {
                     onValueChanges = { taskDesc = taskDate },
                     stringResource(R.string.select_date_from_calendar),
                     Modifier
-                        .padding(top = 8.dp, bottom = 24.dp, start = 8.dp, end = 8.dp)
+                        .padding(top = 8.dp, bottom = 24.dp, start = 8.dp, end = 8.dp),
+                    isError = isErrorTaskDate,
+                    supportingText = {
+                        if (isErrorTaskDate) {
+                            SimpleText(
+                                text = stringResource(R.string.this_field_is_required),
+                                textStyle = MaterialTheme.typography.labelMedium,
+                                textColor = Color.Red
+                            )
+                        }
+                    }
                 )
                 IconButton(
                     onClick = {
