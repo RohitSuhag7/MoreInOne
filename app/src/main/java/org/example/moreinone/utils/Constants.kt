@@ -8,4 +8,6 @@ object Constants {
     const val TASK_CREATE_SCREEN = "task_create_screen"
 
     const val TODO_NAV_KEY = "todo_nav_key"
+
+    const val ONE_DAY_TIME = 60 * 60 * 1000 * 24
 }
