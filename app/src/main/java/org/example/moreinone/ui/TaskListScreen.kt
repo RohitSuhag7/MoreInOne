@@ -10,10 +10,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -63,6 +66,10 @@ fun TaskListScreen(navController: NavController) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
+    var dropDownMenuExpended by remember { mutableStateOf(false) }
+
+    var isSorted by remember { mutableStateOf(false) }
+
     val mContext = LocalContext.current
 
     Scaffold(
@@ -73,7 +80,32 @@ fun TaskListScreen(navController: NavController) {
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.primary
-                )
+                ),
+                actions = {
+                    IconButton(onClick = {
+                        dropDownMenuExpended = !dropDownMenuExpended
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.MoreVert,
+                            contentDescription = "More Icon"
+                        )
+                    }
+
+                    DropdownMenu(
+                        expanded = dropDownMenuExpended,
+                        onDismissRequest = { dropDownMenuExpended = false }) {
+                        DropdownMenuItem(
+                            text = { SimpleText(text = "Important") },
+                            onClick = {
+                                isSorted = true
+                            })
+                        DropdownMenuItem(
+                            text = { SimpleText(text = "Unimportant") },
+                            onClick = {
+                                isSorted = false
+                            })
+                    }
+                }
             )
         },
         floatingActionButton = {
@@ -98,13 +130,18 @@ fun TaskListScreen(navController: NavController) {
             } else {
                 Column(modifier = Modifier.padding(paddingValues)) {
                     LazyColumn {
-                        items(getAllTodos.size) { index ->
+                        val listSorted =
+                            if (isSorted)
+                                getAllTodos.sortedByDescending { it.isImportant }
+                            else
+                                getAllTodos
+                        items(listSorted.size) { index ->
                             ListCardView(
-                                todo = getAllTodos[index],
+                                todo = listSorted[index],
                                 todoViewModel = todoViewModel,
                                 navController = navController,
                                 onDelete = {
-                                    todoViewModel.deleteTodo(todo = getAllTodos[index])
+                                    todoViewModel.deleteTodo(todo = listSorted[index])
                                     mySnackbar(
                                         scope = scope,
                                         snackbarHostState = snackbarHostState,
@@ -120,6 +157,7 @@ fun TaskListScreen(navController: NavController) {
                         }
                     }
                 }
+
             }
         }
     )
