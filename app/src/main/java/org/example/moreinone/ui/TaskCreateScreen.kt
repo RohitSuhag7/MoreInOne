@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.Checkbox
@@ -19,9 +21,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -45,7 +49,9 @@ import org.example.moreinone.model.Todo
 import org.example.moreinone.navigation.Screens
 import org.example.moreinone.utils.DisablePastDates
 import org.example.moreinone.utils.convertLongToTime
+import org.example.moreinone.utils.timeFormatter
 import org.example.moreinone.viewmodel.TodoViewModel
+import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -56,10 +62,14 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) {
     var taskName by remember { mutableStateOf(todo?.taskName ?: "") }
     var taskDesc by remember { mutableStateOf(todo?.taskDesc ?: "") }
     var taskDate by remember { mutableStateOf(todo?.createdOn ?: "") }
+    var taskTime by remember { mutableStateOf(todo?.createdTime ?: "") }
     var checkedState by remember { mutableStateOf(todo?.isImportant ?: false) }
 
-    val openDialog = remember { mutableStateOf(false) }
+    val openDateDialog = remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState(selectableDates = DisablePastDates)
+
+    val openTimeDialog = remember { mutableStateOf(false) }
+    val timePickerState = rememberTimePickerState()
 
     val todoViewModel: TodoViewModel = hiltViewModel()
     val mContext = LocalContext.current
@@ -67,15 +77,19 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) {
     var isErrorTaskName by rememberSaveable { mutableStateOf(false) }
     var isErrorTaskDesc by rememberSaveable { mutableStateOf(false) }
     var isErrorTaskDate by rememberSaveable { mutableStateOf(false) }
+    var isErrorTaskTime by rememberSaveable { mutableStateOf(false) }
+
+    val scrollState = rememberScrollState()
 
     fun validate() {
-        if (taskName.isNotEmpty() && taskDesc.isNotEmpty() && taskDate.isNotEmpty()) {
+        if (taskName.isNotEmpty() && taskDesc.isNotEmpty() && taskDate.isNotEmpty() && taskTime.isNotEmpty()) {
             todoViewModel.insertTodo(
                 Todo(
                     id = todo?.id ?: 0,
                     taskName = taskName,
                     taskDesc = taskDesc,
                     createdOn = taskDate,
+                    createdTime = taskTime,
                     isImportant = checkedState
                 )
             )
@@ -84,6 +98,7 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) {
             isErrorTaskName = taskName.isEmpty()
             isErrorTaskDesc = taskDesc.isEmpty()
             isErrorTaskDate = taskDate.isEmpty()
+            isErrorTaskTime = taskTime.isEmpty()
 
             toastMessage(
                 mContext,
@@ -124,17 +139,18 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = 24.dp, vertical = 50.dp)
+                .padding(horizontal = 24.dp, vertical = 30.dp)
+                .verticalScroll(scrollState)
         ) {
             // Task Name
             SimpleText(text = stringResource(R.string.task_name))
             SimpleTextField(
                 textValue = taskName,
                 onValueChanges = { taskName = it },
-                stringResource(R.string.enter_your_task_name_here),
-                Modifier
+                hintText = stringResource(R.string.enter_your_task_name_here),
+                modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp, bottom = 24.dp, start = 8.dp, end = 8.dp),
+                    .padding(top = 8.dp, bottom = 16.dp, start = 8.dp, end = 8.dp),
                 isError = isErrorTaskName,
                 supportingText = {
                     if (isErrorTaskName) {
@@ -152,10 +168,10 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) {
             SimpleTextField(
                 textValue = taskDesc,
                 onValueChanges = { taskDesc = it },
-                stringResource(R.string.enter_your_task_desc_here),
-                Modifier
+                hintText = stringResource(R.string.enter_your_task_desc_here),
+                modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp, bottom = 24.dp, start = 8.dp, end = 8.dp),
+                    .padding(top = 8.dp, bottom = 16.dp, start = 8.dp, end = 8.dp),
                 isError = isErrorTaskDesc,
                 supportingText = {
                     if (isErrorTaskDesc) {
@@ -175,10 +191,10 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) {
             ) {
                 SimpleTextField(
                     textValue = taskDate,
-                    onValueChanges = { taskDesc = taskDate },
-                    stringResource(R.string.select_date_from_calendar),
-                    Modifier
-                        .padding(top = 8.dp, bottom = 24.dp, start = 8.dp, end = 8.dp),
+                    onValueChanges = { taskDate = it },
+                    hintText = stringResource(R.string.select_date_from_calendar),
+                    modifier = Modifier
+                        .padding(top = 8.dp, bottom = 16.dp, start = 8.dp, end = 8.dp),
                     isError = isErrorTaskDate,
                     supportingText = {
                         if (isErrorTaskDate) {
@@ -192,7 +208,7 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) {
                 )
                 IconButton(
                     onClick = {
-                        openDialog.value = true
+                        openDateDialog.value = true
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -205,14 +221,14 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) {
                         tint = Color.Unspecified,
                     )
                 }
-                if (openDialog.value) {
+                if (openDateDialog.value) {
                     DatePickerDialog(
                         onDismissRequest = {
-                            openDialog.value = false
+                            openDateDialog.value = false
                         },
                         confirmButton = {
                             TextButton(onClick = {
-                                openDialog.value = false
+                                openDateDialog.value = false
                                 var date = mContext.getString(R.string.no_selection)
                                 if (datePickerState.selectedDateMillis != null) {
                                     date = convertLongToTime(datePickerState.selectedDateMillis!!)
@@ -223,6 +239,73 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) {
                             }
                         }) {
                         DatePicker(state = datePickerState)
+                    }
+                }
+            }
+
+            // Time Picker
+            SimpleText(text = stringResource(R.string.task_time))
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                SimpleTextField(
+                    textValue = taskTime,
+                    onValueChanges = { taskTime = it },
+                    hintText = stringResource(R.string.select_time_from_picker),
+                    modifier = Modifier
+                        .padding(top = 8.dp, bottom = 16.dp, start = 8.dp, end = 8.dp),
+                    isError = isErrorTaskTime,
+                    supportingText = {
+                        if (isErrorTaskTime) {
+                            SimpleText(
+                                text = stringResource(R.string.this_field_is_required),
+                                textStyle = MaterialTheme.typography.labelMedium,
+                                textColor = Color.Red
+                            )
+                        }
+                    }
+                )
+                IconButton(
+                    onClick = {
+                        openTimeDialog.value = true
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 12.dp),
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.alarmclock),
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize(),
+                        tint = Color.Unspecified,
+                    )
+                }
+                if (openTimeDialog.value) {
+                    DatePickerDialog(
+                        onDismissRequest = {
+                            openTimeDialog.value = false
+                        },
+                        confirmButton = {
+                            TextButton(onClick = {
+                                openTimeDialog.value = false
+                                val calendar = Calendar.getInstance()
+                                calendar.set(Calendar.HOUR_OF_DAY, timePickerState.hour)
+                                calendar.set(Calendar.MINUTE, timePickerState.minute)
+
+                                val amPm = if (timePickerState.hour < 12)
+                                    mContext.getString(R.string.am)
+                                else
+                                    mContext.getString(R.string.pm)
+
+                                taskTime = "${timeFormatter(calendar.time.time)} $amPm"
+                            }) {
+                                SimpleText(text = stringResource(R.string.okay))
+                            }
+                        }) {
+                        TimePicker(
+                            state = timePickerState,
+                            modifier = Modifier.padding(16.dp),
+                        )
                     }
                 }
             }
@@ -251,7 +334,7 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) {
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 100.dp)
+                    .padding(top = 50.dp)
             ) {
                 val buttonText =
                     if (todo?.id == null)

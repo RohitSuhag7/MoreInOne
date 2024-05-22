@@ -11,6 +11,11 @@ fun convertLongToTime(time: Long): String {
     return SimpleDateFormat("dd MMM, yyyy", Locale.ROOT).format(date)
 }
 
+fun timeFormatter(time: Long): String {
+    val date = Date(time)
+    return SimpleDateFormat("HH:MM", Locale.ROOT).format(date)
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 object DisablePastDates : SelectableDates {
     override fun isSelectableDate(utcTimeMillis: Long): Boolean {

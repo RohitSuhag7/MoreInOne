@@ -11,6 +11,7 @@ data class Todo(
     val taskName: String? = "",
     val taskDesc: String? = "",
     val createdOn: String? = "",
+    val createdTime: String? = "",
     val isImportant: Boolean? = false,
     var status: Boolean? = false,
 )

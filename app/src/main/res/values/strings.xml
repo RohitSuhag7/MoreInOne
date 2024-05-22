@@ -3,9 +3,11 @@
     <string name="task_name">Task Name</string>
     <string name="task_desc">Task Description</string>
     <string name="task_date">Task Date</string>
+    <string name="task_time">Task Time</string>
     <string name="enter_your_task_name_here">Enter your task name here</string>
     <string name="enter_your_task_desc_here">Enter your task description here</string>
     <string name="select_date_from_calendar">Select task date</string>
+    <string name="select_time_from_picker">Select task time</string>
     <string name="important">Important</string>
     <string name="create">Create</string>
     <string name="update">Update</string>
@@ -19,4 +21,6 @@
     <string name="undo">UNDO</string>
     <string name="deleted">Deleted \"%1$s\"</string>
     <string name="this_field_is_required">This field is required.</string>
+    <string name="am">AM</string>
+    <string name="pm">PM</string>
 </resources>
