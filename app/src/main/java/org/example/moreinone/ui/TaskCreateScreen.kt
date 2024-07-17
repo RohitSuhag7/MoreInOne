@@ -49,9 +49,11 @@ import org.example.moreinone.model.Todo
 import org.example.moreinone.navigation.Screens
 import org.example.moreinone.utils.DisablePastDates
 import org.example.moreinone.utils.convertLongToTime
+import org.example.moreinone.utils.reminder.scheduleAlarm
 import org.example.moreinone.utils.timeFormatter
 import org.example.moreinone.viewmodel.TodoViewModel
 import java.util.Calendar
+import java.util.Random
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -331,6 +333,15 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) {
             ElevatedButton(
                 onClick = {
                     validate()
+                    val time = taskTime.split(":", " ")
+                    val id: Int = Random().nextInt(Integer.MAX_VALUE)
+                    scheduleAlarm(
+                        context = mContext,
+                        id = id,
+                        title = taskName,
+                        hour = time[0].toInt(),
+                        minute = time[1].toInt()
+                    )
                 },
                 modifier = Modifier
                     .fillMaxWidth()

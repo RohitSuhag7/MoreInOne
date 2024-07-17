@@ -13,7 +13,7 @@ fun convertLongToTime(time: Long): String {
 
 fun timeFormatter(time: Long): String {
     val date = Date(time)
-    return SimpleDateFormat("HH:MM", Locale.ROOT).format(date)
+    return SimpleDateFormat("HH:mm", Locale.ROOT).format(date)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

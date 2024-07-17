@@ -23,4 +23,5 @@
     <string name="this_field_is_required">This field is required.</string>
     <string name="am">AM</string>
     <string name="pm">PM</string>
+    <string name="todo">Todo</string>
 </resources>
