@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.example.moreinone.model.Todo
+import org.example.moreinone.model.entities.Todo
 import org.example.moreinone.repository.TodoRepository
 import javax.inject.Inject
 

@@ -51,7 +51,7 @@ import org.example.moreinone.R
 import org.example.moreinone.common.EmptyScreen
 import org.example.moreinone.common.SimpleText
 import org.example.moreinone.common.mySnackbar
-import org.example.moreinone.model.Todo
+import org.example.moreinone.model.entities.Todo
 import org.example.moreinone.navigation.Screens
 import org.example.moreinone.utils.Constants.TODO_NAV_KEY
 import org.example.moreinone.viewmodel.TodoViewModel
@@ -103,6 +103,11 @@ fun TaskListScreen(navController: NavController) {
                             text = { SimpleText(text = "Unimportant") },
                             onClick = {
                                 isSorted = false
+                            })
+                        DropdownMenuItem(
+                            text = { SimpleText(text = "Settings") },
+                            onClick = {
+                                navController.navigate(Screens.SettingsScreen.route)
                             })
                     }
                 }

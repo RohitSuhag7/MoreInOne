@@ -45,7 +45,7 @@ import org.example.moreinone.R
 import org.example.moreinone.common.SimpleText
 import org.example.moreinone.common.SimpleTextField
 import org.example.moreinone.common.toastMessage
-import org.example.moreinone.model.Todo
+import org.example.moreinone.model.entities.Todo
 import org.example.moreinone.navigation.Screens
 import org.example.moreinone.utils.DisablePastDates
 import org.example.moreinone.utils.convertLongToTime

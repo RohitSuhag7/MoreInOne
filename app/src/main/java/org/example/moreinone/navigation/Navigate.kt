@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import org.example.moreinone.ui.SettingsScreen
 import org.example.moreinone.ui.TaskCreateScreen
 import org.example.moreinone.ui.TaskListScreen
 import org.example.moreinone.utils.Constants.TODO_NAV_KEY
@@ -31,6 +32,9 @@ fun Navigate() {
                 navController = navController,
                 navBackStackEntry.arguments?.getString(TODO_NAV_KEY)
             )
+        }
+        composable(route = Screens.SettingsScreen.route) {
+            SettingsScreen(navController)
         }
     }
 }

@@ -1,8 +1,8 @@
 package org.example.moreinone.repository
 
 import kotlinx.coroutines.flow.Flow
-import org.example.moreinone.model.Todo
-import org.example.moreinone.model.TodoDao
+import org.example.moreinone.model.entities.Todo
+import org.example.moreinone.model.dao.TodoDao
 import javax.inject.Inject
 
 class TodoRepository @Inject constructor(private val todoDao: TodoDao) {
