@@ -96,6 +96,17 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) {
                 )
             )
             navController.navigate(Screens.TaskListScreen.route)
+
+            // Set Notification Reminder
+            val time = taskTime.split(":", " ")
+            val id: Int = Random().nextInt(Integer.MAX_VALUE)
+            scheduleAlarm(
+                context = mContext,
+                id = todo?.id ?: 0,
+                title = taskName,
+                hour = time[0].toInt(),
+                minute = time[1].toInt()
+            )
         } else {
             isErrorTaskName = taskName.isEmpty()
             isErrorTaskDesc = taskDesc.isEmpty()
@@ -333,15 +344,6 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) {
             ElevatedButton(
                 onClick = {
                     validate()
-                    val time = taskTime.split(":", " ")
-                    val id: Int = Random().nextInt(Integer.MAX_VALUE)
-                    scheduleAlarm(
-                        context = mContext,
-                        id = id,
-                        title = taskName,
-                        hour = time[0].toInt(),
-                        minute = time[1].toInt()
-                    )
                 },
                 modifier = Modifier
                     .fillMaxWidth()

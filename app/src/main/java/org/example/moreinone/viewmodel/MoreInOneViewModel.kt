@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.example.moreinone.model.entities.Settings
+import org.example.moreinone.model.entities.MoreSettings
 import org.example.moreinone.repository.MoreInOneRepository
 import javax.inject.Inject
 
@@ -14,9 +14,9 @@ class MoreInOneViewModel @Inject constructor(private val moreInOneRepository: Mo
 
     val getSettings = moreInOneRepository.getSettings()
 
-    fun insertSettings(settings: Settings) {
+    fun insertSettings(moreSettings: MoreSettings) {
         viewModelScope.launch(Dispatchers.IO) {
-            moreInOneRepository.insertSettings(settings)
+            moreInOneRepository.insertSettings(moreSettings)
         }
     }
 }
