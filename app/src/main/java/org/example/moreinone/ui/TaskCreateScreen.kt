@@ -49,7 +49,7 @@ import org.example.moreinone.model.entities.Todo
 import org.example.moreinone.navigation.Screens
 import org.example.moreinone.utils.DisablePastDates
 import org.example.moreinone.utils.convertLongToTime
-import org.example.moreinone.utils.reminder.scheduleAlarm
+import org.example.moreinone.common.reminder.scheduleAlarm
 import org.example.moreinone.utils.timeFormatter
 import org.example.moreinone.viewmodel.TodoViewModel
 import java.util.Calendar

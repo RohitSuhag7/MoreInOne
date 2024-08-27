@@ -1,4 +1,4 @@
-package org.example.moreinone.utils.reminder
+package org.example.moreinone.common.reminder
 
 import android.app.AlarmManager
 import android.app.PendingIntent

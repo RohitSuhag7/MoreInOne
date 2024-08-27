@@ -1,4 +1,4 @@
-package org.example.moreinone.utils.biometricAuthentication
+package org.example.moreinone.common.biometricAuthentication
 
 sealed interface BiometricResult {
     data object HardwareUnavailable : BiometricResult

@@ -1,4 +1,4 @@
-package org.example.moreinone.utils.biometricAuthentication
+package org.example.moreinone.common.biometricAuthentication
 
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
