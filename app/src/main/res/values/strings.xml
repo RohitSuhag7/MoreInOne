@@ -31,4 +31,7 @@
     <string name="error">Error</string>
     <string name="error_description">This action cannot be completed at this time. Please wait a few minutes and try the action again.</string>
     <string name="feature_error_description">Your device does not support this functionality.</string>
+    <string name="set">Set</string>
+    <string name="no">No</string>
+    <string name="ok">OK</string>
 </resources>

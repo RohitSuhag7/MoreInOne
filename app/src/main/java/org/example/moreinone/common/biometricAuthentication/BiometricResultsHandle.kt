@@ -37,7 +37,7 @@ fun BiometricResultsHandle(
     val openAlertDialog = remember { mutableStateOf(false) }
 
     fun updateAuthenticationValue() {
-        // Insert values in Settings Table
+        // Update values in Settings Table
         moreInOneViewModel.insertSettings(
             MoreSettings(
                 id = getSettings?.id ?: 0,
@@ -48,6 +48,9 @@ fun BiometricResultsHandle(
         // Dismiss Dialog
         openAlertDialog.value = false
     }
+
+    // For maintain composable for activity result
+    val hasLaunchedEnrollment = remember { mutableStateOf(false) }
 
     val enrollLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
@@ -60,6 +63,7 @@ fun BiometricResultsHandle(
             } else {
                 openAlertDialog.value = true
             }
+            hasLaunchedEnrollment.value = true
         })
 
     if (openAlertDialog.value) {
@@ -68,14 +72,15 @@ fun BiometricResultsHandle(
                 updateAuthenticationValue()
             },
             confirmButton = {
+                hasLaunchedEnrollment.value = false
                 openAlertDialog.value = false
                 biometricPromptManager.showBiometricPrompt(
                     localContext.getString(R.string.authenticate),
                     localContext.getString(R.string.please_authenticate)
                 )
             },
-            confirmButtonText = "Set",
-            dismissButtonText = "Dismiss",
+            confirmButtonText = stringResource(R.string.set),
+            dismissButtonText = stringResource(R.string.no),
             icon = Icons.Default.Warning,
             title = stringResource(id = R.string.authenticate),
             description = stringResource(id = R.string.do_you_want_authentication)
@@ -92,7 +97,7 @@ fun BiometricResultsHandle(
                     confirmButton = {
                         updateAuthenticationValue()
                     },
-                    confirmButtonText = "OK",
+                    confirmButtonText = stringResource(R.string.ok),
                     icon = Icons.Default.Warning,
                     title = stringResource(id = R.string.error),
                     description = stringResource(id = R.string.error_description)
@@ -107,7 +112,7 @@ fun BiometricResultsHandle(
                     confirmButton = {
                         updateAuthenticationValue()
                     },
-                    confirmButtonText = "OK",
+                    confirmButtonText = stringResource(R.string.ok),
                     icon = Icons.Default.Warning,
                     title = stringResource(id = R.string.error),
                     description = stringResource(id = R.string.error_description)
@@ -115,17 +120,21 @@ fun BiometricResultsHandle(
             }
 
             BiometricResult.AuthenticationNotSet -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    val enrollIntent = Intent(Settings.ACTION_BIOMETRIC_ENROLL).apply {
-                        putExtra(
-                            Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
-                            BIOMETRIC_STRONG or DEVICE_CREDENTIAL
-                        )
+                if (!hasLaunchedEnrollment.value) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        val enrollIntent = Intent(Settings.ACTION_BIOMETRIC_ENROLL).apply {
+                            putExtra(
+                                Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
+                                BIOMETRIC_STRONG or DEVICE_CREDENTIAL
+                            )
+                        }
+                        enrollLauncher.launch(enrollIntent)
+                    } else {
+                        val enrollIntent = Intent(Settings.ACTION_SECURITY_SETTINGS)
+                        enrollLauncher.launch(enrollIntent)
                     }
-                    enrollLauncher.launch(enrollIntent)
-                } else {
-                    val enrollIntent = Intent(Settings.ACTION_SECURITY_SETTINGS)
-                    enrollLauncher.launch(enrollIntent)
+
+                    hasLaunchedEnrollment.value = true
                 }
             }
 
@@ -139,7 +148,7 @@ fun BiometricResultsHandle(
                     confirmButton = {
                         updateAuthenticationValue()
                     },
-                    confirmButtonText = "OK",
+                    confirmButtonText = stringResource(R.string.ok),
                     icon = Icons.Default.Warning,
                     title = stringResource(id = R.string.error),
                     description = stringResource(id = R.string.feature_error_description)
@@ -154,7 +163,7 @@ fun BiometricResultsHandle(
                     confirmButton = {
                         updateAuthenticationValue()
                     },
-                    confirmButtonText = "OK",
+                    confirmButtonText = stringResource(R.string.ok),
                     icon = Icons.Default.Warning,
                     title = stringResource(id = R.string.error),
                     description = stringResource(id = R.string.feature_error_description)
