@@ -17,7 +17,7 @@ fun scheduleAlarm(context: Context, id: Int, title: String, hour: Int, minute: I
         context,
         id,
         alarmIntent,
-        PendingIntent.FLAG_UPDATE_CURRENT
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
 
     val calendar = Calendar.getInstance().apply {
