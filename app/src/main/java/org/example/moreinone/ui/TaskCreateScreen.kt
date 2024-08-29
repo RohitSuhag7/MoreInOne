@@ -49,7 +49,7 @@ import org.example.moreinone.model.entities.Todo
 import org.example.moreinone.navigation.Screens
 import org.example.moreinone.utils.DisablePastDates
 import org.example.moreinone.utils.convertLongToTime
-import org.example.moreinone.utils.reminder.scheduleAlarm
+import org.example.moreinone.common.reminder.scheduleAlarm
 import org.example.moreinone.utils.timeFormatter
 import org.example.moreinone.viewmodel.TodoViewModel
 import java.util.Calendar
@@ -96,6 +96,17 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) {
                 )
             )
             navController.navigate(Screens.TaskListScreen.route)
+
+            // Set Notification Reminder
+            val time = taskTime.split(":", " ")
+            val id: Int = Random().nextInt(Integer.MAX_VALUE)
+            scheduleAlarm(
+                context = mContext,
+                id = todo?.id ?: 0,
+                title = taskName,
+                hour = time[0].toInt(),
+                minute = time[1].toInt()
+            )
         } else {
             isErrorTaskName = taskName.isEmpty()
             isErrorTaskDesc = taskDesc.isEmpty()
@@ -333,15 +344,6 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) {
             ElevatedButton(
                 onClick = {
                     validate()
-                    val time = taskTime.split(":", " ")
-                    val id: Int = Random().nextInt(Integer.MAX_VALUE)
-                    scheduleAlarm(
-                        context = mContext,
-                        id = id,
-                        title = taskName,
-                        hour = time[0].toInt(),
-                        minute = time[1].toInt()
-                    )
                 },
                 modifier = Modifier
                     .fillMaxWidth()

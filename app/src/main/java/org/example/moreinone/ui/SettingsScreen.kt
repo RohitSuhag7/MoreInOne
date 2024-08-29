@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import org.example.moreinone.common.SimpleText
-import org.example.moreinone.model.entities.Settings
+import org.example.moreinone.model.entities.MoreSettings
 import org.example.moreinone.viewmodel.MoreInOneViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,7 +36,7 @@ fun SettingsScreen(navController: NavController) {
 
     val moreInOneViewModel: MoreInOneViewModel = hiltViewModel()
 
-    val getSettings: Settings by moreInOneViewModel.getSettings.collectAsState(initial = Settings())
+    val getSettings: MoreSettings by moreInOneViewModel.getSettings.collectAsState(initial = MoreSettings())
 
     var isAuthenticate by remember { mutableStateOf(getSettings.isAuthenticate ?: false) }
 
@@ -80,7 +80,7 @@ fun SettingsScreen(navController: NavController) {
 
         // Insert values in Settings Table
         moreInOneViewModel.insertSettings(
-            Settings(
+            MoreSettings(
                 id = getSettings.id,
                 isAuthenticate = isAuthenticate
             )

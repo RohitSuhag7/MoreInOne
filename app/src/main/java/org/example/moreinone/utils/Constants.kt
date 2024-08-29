@@ -1,7 +1,5 @@
 package org.example.moreinone.utils
 
-import java.util.Date
-
 object Constants {
 
     const val TODO_TABLE = "todo_table"
