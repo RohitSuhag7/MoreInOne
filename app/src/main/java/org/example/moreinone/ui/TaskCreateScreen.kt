@@ -53,7 +53,6 @@ import org.example.moreinone.common.reminder.scheduleAlarm
 import org.example.moreinone.utils.timeFormatter
 import org.example.moreinone.viewmodel.TodoViewModel
 import java.util.Calendar
-import java.util.Random
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -94,7 +93,20 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) {
                     createdTime = taskTime,
                     isImportant = checkedState
                 )
-            )
+            ) { insertedId ->
+
+                // Schedule Alarm Notification
+                val time = taskTime.split(":", " ")
+                scheduleAlarm(
+                    context = mContext,
+                    id = insertedId.toInt(),
+                    title = taskName,
+                    hour = time[0].toInt(),
+                    minute = time[1].toInt()
+                )
+            }
+
+            // Navigate to TaskListScreen
             navController.navigate(Screens.TaskListScreen.route)
 
             // Set Notification Reminder
