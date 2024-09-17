@@ -12,7 +12,7 @@ import org.example.moreinone.model.entities.Todo
 interface TodoDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTodo(todo: Todo)
+    suspend fun insertTodo(todo: Todo): Long
 
     @Delete
     suspend fun deleteTodo(todo: Todo)

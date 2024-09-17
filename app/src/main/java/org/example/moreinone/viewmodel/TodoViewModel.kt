@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.example.moreinone.model.entities.Todo
 import org.example.moreinone.repository.TodoRepository
 import javax.inject.Inject
@@ -16,9 +17,12 @@ class TodoViewModel @Inject constructor(private val todoRepository: TodoReposito
 
     val getAllTodos = todoRepository.getAllTodos()
 
-    fun insertTodo(todo: Todo) {
+    fun insertTodo(todo: Todo, onResult: ((Long) -> Unit)? = null) {
         viewModelScope.launch(Dispatchers.IO) {
-            todoRepository.insertTodo(todo)
+            val insertedId = todoRepository.insertTodo(todo)
+            withContext(Dispatchers.Main) {
+                onResult?.invoke(insertedId)
+            }
         }
     }
 
