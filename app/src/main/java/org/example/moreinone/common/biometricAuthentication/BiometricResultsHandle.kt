@@ -129,9 +129,6 @@ fun BiometricResultsHandle(
                             )
                         }
                         enrollLauncher.launch(enrollIntent)
-                    } else {
-                        val enrollIntent = Intent(Settings.ACTION_SECURITY_SETTINGS)
-                        enrollLauncher.launch(enrollIntent)
                     }
 
                     hasLaunchedEnrollment.value = true

@@ -1,5 +1,6 @@
 package org.example.moreinone.ui
 
+import android.os.Build
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -65,17 +66,19 @@ fun SettingsScreen(navController: NavController) {
                 .padding(horizontal = 24.dp, vertical = 30.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            SimpleText(
-                text = "Authentication",
-                textColor = Color.Black,
-                modifier = Modifier.padding(12.dp)
-            )
-            Switch(
-                checked = isAuthenticate,
-                onCheckedChange = {
-                    isAuthenticate = it
-                }
-            )
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                SimpleText(
+                    text = "Authentication",
+                    textColor = Color.Black,
+                    modifier = Modifier.padding(12.dp)
+                )
+                Switch(
+                    checked = isAuthenticate,
+                    onCheckedChange = {
+                        isAuthenticate = it
+                    }
+                )
+            }
         }
 
         // Insert values in Settings Table

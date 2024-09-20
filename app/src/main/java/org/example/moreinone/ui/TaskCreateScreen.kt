@@ -111,7 +111,6 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) {
 
             // Set Notification Reminder
             val time = taskTime.split(":", " ")
-            val id: Int = Random().nextInt(Integer.MAX_VALUE)
             scheduleAlarm(
                 context = mContext,
                 id = todo?.id ?: 0,
