@@ -24,4 +24,14 @@
     <string name="am">AM</string>
     <string name="pm">PM</string>
     <string name="todo">Todo</string>
+    <string name="cancel">Cancel</string>
+    <string name="authenticate">Authenticate</string>
+    <string name="please_authenticate">Please Authenticate</string>
+    <string name="do_you_want_authentication">Do you want to add Authentication?</string>
+    <string name="error">Error</string>
+    <string name="error_description">This action cannot be completed at this time. Please wait a few minutes and try the action again.</string>
+    <string name="feature_error_description">Your device does not support this functionality.</string>
+    <string name="set">Set</string>
+    <string name="no">No</string>
+    <string name="ok">OK</string>
 </resources>

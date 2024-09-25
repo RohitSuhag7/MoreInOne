@@ -1,5 +1,6 @@
 package org.example.moreinone.ui
 
+import android.os.Build
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +17,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,11 +26,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavController
 import org.example.moreinone.common.SimpleText
-import org.example.moreinone.model.entities.Settings
+import org.example.moreinone.model.entities.MoreSettings
 import org.example.moreinone.viewmodel.MoreInOneViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,9 +42,17 @@ fun SettingsScreen(navController: NavController) {
 
     val moreInOneViewModel: MoreInOneViewModel = hiltViewModel()
 
-    val getSettings: Settings by moreInOneViewModel.getSettings.collectAsState(initial = Settings())
+    val getSettings: MoreSettings? by moreInOneViewModel.getSettings.collectAsState(initial = null)
 
-    var isAuthenticate by remember { mutableStateOf(getSettings.isAuthenticate ?: false) }
+    var isAuthenticate by remember { mutableStateOf(getSettings?.isAuthenticate ?: false) }
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    LaunchedEffect(getSettings) {
+        if (getSettings != null) {
+            isAuthenticate = getSettings?.isAuthenticate ?: false
+        }
+    }
 
     Scaffold(topBar = {
         TopAppBar(
@@ -65,25 +79,38 @@ fun SettingsScreen(navController: NavController) {
                 .padding(horizontal = 24.dp, vertical = 30.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            SimpleText(
-                text = "Authentication",
-                textColor = Color.Black,
-                modifier = Modifier.padding(12.dp)
-            )
-            Switch(
-                checked = isAuthenticate,
-                onCheckedChange = {
-                    isAuthenticate = it
-                }
-            )
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                SimpleText(
+                    text = "Authentication",
+                    textColor = Color.Black,
+                    modifier = Modifier.padding(12.dp)
+                )
+                Switch(
+                    checked = isAuthenticate,
+                    onCheckedChange = {
+                        isAuthenticate = it
+                    }
+                )
+            }
         }
+    }
 
-        // Insert values in Settings Table
-        moreInOneViewModel.insertSettings(
-            Settings(
-                id = getSettings.id,
-                isAuthenticate = isAuthenticate
-            )
-        )
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_STOP) {
+                // Insert values in Settings Table
+                moreInOneViewModel.insertSettings(
+                    MoreSettings(
+                        id = getSettings?.id,
+                        isAuthenticate = isAuthenticate
+                    )
+                )
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
     }
 }
