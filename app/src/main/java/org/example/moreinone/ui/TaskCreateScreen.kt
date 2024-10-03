@@ -96,11 +96,15 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) {
             ) { insertedId ->
 
                 // Schedule Alarm Notification
+                val date = taskDate.split(", ")
                 val time = taskTime.split(":", " ")
                 scheduleAlarm(
                     context = mContext,
                     id = insertedId.toInt(),
                     title = taskName,
+                    year = 2024,
+                    month = 10,
+                    day = 3,
                     hour = time[0].toInt(),
                     minute = time[1].toInt()
                 )
@@ -109,15 +113,6 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) {
             // Navigate to TaskListScreen
             navController.navigate(Screens.TaskListScreen.route)
 
-            // Set Notification Reminder
-            val time = taskTime.split(":", " ")
-            scheduleAlarm(
-                context = mContext,
-                id = todo?.id ?: 0,
-                title = taskName,
-                hour = time[0].toInt(),
-                minute = time[1].toInt()
-            )
         } else {
             isErrorTaskName = taskName.isEmpty()
             isErrorTaskDesc = taskDesc.isEmpty()

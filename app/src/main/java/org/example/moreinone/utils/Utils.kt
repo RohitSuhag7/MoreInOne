@@ -8,7 +8,7 @@ import java.util.Locale
 
 fun convertLongToTime(time: Long): String {
     val date = Date(time)
-    return SimpleDateFormat("dd MMM, yyyy", Locale.ENGLISH).format(date)
+    return SimpleDateFormat("dd, MM, yyyy", Locale.ENGLISH).format(date)
 }
 
 fun timeFormatter(time: Long): String {
