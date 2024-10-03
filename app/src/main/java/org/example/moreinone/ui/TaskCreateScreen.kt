@@ -102,9 +102,9 @@ fun TaskCreateScreen(navController: NavController, todoJsonString: String?) {
                     context = mContext,
                     id = insertedId.toInt(),
                     title = taskName,
-                    year = 2024,
-                    month = 10,
-                    day = 3,
+                    year = date[2].toInt(),
+                    month = date[1].toInt(),
+                    day = date[0].toInt(),
                     hour = time[0].toInt(),
                     minute = time[1].toInt()
                 )
