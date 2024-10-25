@@ -1,4 +1,4 @@
-package org.example.moreinone.ui
+package org.example.moreinone.ui.todo
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -103,11 +103,6 @@ fun TaskListScreen(navController: NavController) {
                             text = { SimpleText(text = "Unimportant") },
                             onClick = {
                                 isSorted = false
-                            })
-                        DropdownMenuItem(
-                            text = { SimpleText(text = "Settings") },
-                            onClick = {
-                                navController.navigate(Screens.SettingsScreen.route)
                             })
                     }
                 }

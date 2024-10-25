@@ -1,4 +1,4 @@
-package org.example.moreinone.ui
+package org.example.moreinone.ui.todo
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
