@@ -20,4 +20,8 @@ object Constants {
 
     const val ID_KEY = "id"
     const val TITLE_KEY = "title"
+
+    const val TODO_APP = "TODO"
+    const val CALCULATOR_APP = "Calculator"
+    const val OTHER_APP = "Other"
 }
