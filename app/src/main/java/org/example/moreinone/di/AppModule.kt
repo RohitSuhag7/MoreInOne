@@ -8,7 +8,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import org.example.moreinone.model.dao.TodoDao
-import org.example.moreinone.model.database.TodoDatabase
 import org.example.moreinone.model.dao.SettingsDao
 import org.example.moreinone.model.database.LocalDatabase
 import org.example.moreinone.repository.MoreInOneRepository
@@ -18,16 +17,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-
-    @Provides
-    @Singleton
-    fun provideTodoDatabase(@ApplicationContext context: Context): TodoDatabase {
-        return Room.databaseBuilder(
-            context,
-            TodoDatabase::class.java,
-            "todo_db"
-        ).build()
-    }
 
     @Provides
     @Singleton
@@ -41,7 +30,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideTodoDao(todoDB: TodoDatabase): TodoDao = todoDB.todoDao()
+    fun provideTodoDao(localDB: LocalDatabase): TodoDao = localDB.todoDao()
 
     @Provides
     @Singleton
@@ -53,5 +42,6 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideMoreInOneRepository(settingsDao: SettingsDao): MoreInOneRepository = MoreInOneRepository(settingsDao)
+    fun provideMoreInOneRepository(settingsDao: SettingsDao): MoreInOneRepository =
+        MoreInOneRepository(settingsDao)
 }
