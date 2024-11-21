@@ -5,6 +5,7 @@ object Constants {
     const val TODO_TABLE = "todo_table"
     const val SETTINGS_TABLE = "settings_table"
 
+    const val HOME_SCREEN = "home_screen"
     const val TASK_LIST_SCREEN = "task_list_screen"
     const val TASK_CREATE_SCREEN = "task_create_screen"
     const val SETTINGS_SCREEN = "settings_screen"
@@ -19,4 +20,8 @@ object Constants {
 
     const val ID_KEY = "id"
     const val TITLE_KEY = "title"
+
+    const val TODO_APP = "TODO"
+    const val CALCULATOR_APP = "Calculator"
+    const val OTHER_APP = "Other"
 }
