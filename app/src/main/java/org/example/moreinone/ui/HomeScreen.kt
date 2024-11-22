@@ -79,12 +79,13 @@ fun HomeScreen(navController: NavController) {
                         onClick = {
                             when (applicationOptionsList[index]) {
                                 Constants.TODO_APP -> {
-                                    // Navigate to TaskListScreen
+                                    // Navigate to TaskList Screen
                                     navController.navigate(Screens.TaskListScreen.route)
                                 }
 
                                 Constants.CALCULATOR_APP -> {
-                                    // TODO
+                                    // Navigate to Calculator Screen
+                                    navController.navigate(Screens.CalculatorScreen.route)
                                 }
 
                                 Constants.OTHER_APP -> {
