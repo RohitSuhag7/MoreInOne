@@ -10,27 +10,38 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import org.example.moreinone.ui.theme.BrightPurple
 import org.example.moreinone.ui.theme.Purple40
 import org.example.moreinone.ui.theme.PurpleGrey40
 import org.example.moreinone.ui.theme.PurpleGrey80
+import org.example.moreinone.viewmodel.CalculatorViewModel
 
 @Composable
 fun CalculatorScreen() {
     val buttonSpacing = 8.dp
+
+    val calculatorViewModel: CalculatorViewModel = hiltViewModel()
+    val expression = calculatorViewModel.expression
+
+    // Calculator Buttons
+    val calculatorButtons = listOf(
+        listOf("AC", "(", ")", "÷"),
+        listOf("7", "8", "9", "×"),
+        listOf("4", "5", "6", "-"),
+        listOf("1", "2", "3", "+"),
+        listOf("0", ".", "⌫", "=")
+    )
 
     Box(
         modifier = Modifier
@@ -50,7 +61,7 @@ fun CalculatorScreen() {
             ) {
                 item {
                     Text(
-                        text = "|",
+                        text = expression.value.ifEmpty { "|" },
                         textAlign = TextAlign.End,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -74,206 +85,41 @@ fun CalculatorScreen() {
                         .padding(bottom = 16.dp),
                     color = Color.Gray
                 )
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(buttonSpacing),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                ) {
-                    CalculatorButton(
-                        symbol = "AC",
-                        color = BrightPurple,
+
+                calculatorButtons.forEach { row ->
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(buttonSpacing),
                         modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f)
-                    )
-                    CalculatorButton(
-                        symbol = "(",
-                        color = PurpleGrey80,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f)
-                    )
-                    CalculatorButton(
-                        symbol = ")",
-                        color = PurpleGrey80,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f)
-                    )
-                    CalculatorButton(
-                        symbol = "÷",
-                        color = PurpleGrey80,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f)
-                    )
-                }
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(buttonSpacing),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                ) {
-                    CalculatorButton(
-                        symbol = "7",
-                        color = PurpleGrey40,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f)
-                    )
-                    CalculatorButton(
-                        symbol = "8",
-                        color = PurpleGrey40,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f)
-                    )
-                    CalculatorButton(
-                        symbol = "9",
-                        color = PurpleGrey40,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f)
-                    )
-                    CalculatorButton(
-                        symbol = "×",
-                        color = PurpleGrey80,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f)
-                    )
-                }
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(buttonSpacing),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                ) {
-                    CalculatorButton(
-                        symbol = "4",
-                        color = PurpleGrey40,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f)
-                    )
-                    CalculatorButton(
-                        symbol = "5",
-                        color = PurpleGrey40,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f)
-                    )
-                    CalculatorButton(
-                        symbol = "6",
-                        color = PurpleGrey40,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f)
-                    )
-                    CalculatorButton(
-                        symbol = "-",
-                        color = PurpleGrey80,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f)
-                    )
-                }
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(buttonSpacing),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                ) {
-                    CalculatorButton(
-                        symbol = "1",
-                        color = PurpleGrey40,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f)
-                    )
-                    CalculatorButton(
-                        symbol = "2",
-                        color = PurpleGrey40,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f)
-                    )
-                    CalculatorButton(
-                        symbol = "3",
-                        color = PurpleGrey40,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f)
-                    )
-                    CalculatorButton(
-                        symbol = "+",
-                        color = PurpleGrey80,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f)
-                    )
-                }
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(buttonSpacing),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
-                ) {
-                    CalculatorButton(
-                        symbol = "0",
-                        color = PurpleGrey40,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f)
-                    )
-                    CalculatorButton(
-                        symbol = ".",
-                        color = PurpleGrey40,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f)
-                    )
-                    CalculatorButton(
-                        symbol = "Del",
-                        color = BrightPurple,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f)
-                    )
-                    CalculatorButton(
-                        symbol = "=",
-                        color = Purple40,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f)
-                    )
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                    ) {
+                        row.forEach { button ->
+                            CalculatorButton(
+                                symbol = button,
+                                modifier = Modifier
+                                    .aspectRatio(1f)
+                                    .weight(1f),
+                                color = when (button) {
+                                    in "AC, ⌫" -> BrightPurple
+                                    "=" -> Purple40
+                                    in "÷, ×, -, +, (, )" -> PurpleGrey80
+                                    else -> PurpleGrey40
+                                },
+                                onClick = {
+                                    when (button) {
+                                        "AC" -> calculatorViewModel.clear()
+                                        "=" -> if (expression.value.isNotEmpty() && expression.value.any { it.isDigit() }) calculatorViewModel.evaluateExpression()
+                                        in "÷, ×, -, +" -> if (expression.value.isNotEmpty()) calculatorViewModel.append(button)
+                                        ")" -> if (expression.value.contains('(')) calculatorViewModel.append(button)
+                                        "⌫" -> calculatorViewModel.delete()
+                                        else -> calculatorViewModel.append(button)
+                                    }
+                                },
+                            )
+                        }
+                    }
                 }
             }
-
         }
-    }
-}
-
-@Composable
-fun CalculatorButton(
-    symbol: String,
-    modifier: Modifier = Modifier,
-    color: Color = Color.White,
-    textStyle: TextStyle = TextStyle()
-) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .clip(RoundedCornerShape(100.dp))
-            .background(color)
-            .then(modifier)
-    ) {
-        Text(
-            text = symbol,
-            style = textStyle,
-            fontSize = 36.sp,
-            color = Color.White
-        )
     }
 }

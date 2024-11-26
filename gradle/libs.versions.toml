@@ -16,6 +16,7 @@ roomRuntime = "2.6.1"
 hiltAndroid = "2.51"
 navigationCompose = "2.7.7"
 gson = "2.10.1"
+exp4j = "0.4.8"
 
 [libraries]
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
@@ -55,6 +56,9 @@ gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 
 # Biometric
 androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
+
+# Calculator Result Library
+exp4j = { module = "net.objecthunter:exp4j", version.ref = "exp4j" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
