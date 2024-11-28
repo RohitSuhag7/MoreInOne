@@ -1,4 +1,4 @@
-package org.example.moreinone.common
+package org.example.moreinone.common.utils
 
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField

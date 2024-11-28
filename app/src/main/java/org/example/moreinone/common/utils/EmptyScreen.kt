@@ -1,4 +1,4 @@
-package org.example.moreinone.common
+package org.example.moreinone.common.utils
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues

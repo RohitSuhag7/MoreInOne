@@ -10,6 +10,7 @@ object Constants {
     const val TASK_CREATE_SCREEN = "task_create_screen"
     const val SETTINGS_SCREEN = "settings_screen"
     const val CALCULATOR_SCREEN = "calculator_screen"
+    const val NOTES_LIST_SCREEN = "notes_list_screen"
 
     const val TODO_NAV_KEY = "todo_nav_key"
 
@@ -24,5 +25,5 @@ object Constants {
 
     const val TODO_APP = "TODO"
     const val CALCULATOR_APP = "Calculator"
-    const val OTHER_APP = "Other"
+    const val NOTES_APP = "Notes"
 }

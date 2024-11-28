@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.example.moreinone.common.SimpleText
+import org.example.moreinone.common.utils.SimpleText
 
 @Composable
 fun CommonDialog(

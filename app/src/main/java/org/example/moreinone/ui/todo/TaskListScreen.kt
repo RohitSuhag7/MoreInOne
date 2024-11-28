@@ -48,9 +48,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.gson.Gson
 import org.example.moreinone.R
-import org.example.moreinone.common.EmptyScreen
-import org.example.moreinone.common.SimpleText
-import org.example.moreinone.common.mySnackbar
+import org.example.moreinone.common.utils.EmptyScreen
+import org.example.moreinone.common.utils.SimpleText
+import org.example.moreinone.common.utils.mySnackbar
 import org.example.moreinone.model.entities.Todo
 import org.example.moreinone.navigation.Screens
 import org.example.moreinone.utils.Constants.TODO_NAV_KEY

@@ -32,7 +32,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavController
-import org.example.moreinone.common.SimpleText
+import org.example.moreinone.common.utils.SimpleText
 import org.example.moreinone.model.entities.MoreSettings
 import org.example.moreinone.viewmodel.MoreInOneViewModel
 

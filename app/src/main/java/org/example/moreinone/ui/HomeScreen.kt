@@ -34,17 +34,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import org.example.moreinone.R
-import org.example.moreinone.common.SimpleText
+import org.example.moreinone.common.utils.SimpleText
 import org.example.moreinone.navigation.Screens
+import org.example.moreinone.ui.theme.Purple40
 import org.example.moreinone.utils.Constants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavController) {
 
-    val applicationOptionsList = listOf("TODO", "Calculator", "Other")
+    val applicationOptionsList = listOf("TODO", "Calculator", "Notes")
     val colorsList =
-        listOf(Color.Cyan, Color.Yellow, Color.Magenta, Color.Gray, Color.Blue, Color.Green)
+        listOf(Color.Cyan, Color.Yellow, Purple40, Color.Gray, Color.Blue, Color.Green)
 
     Scaffold(
         topBar = {
@@ -88,8 +89,9 @@ fun HomeScreen(navController: NavController) {
                                     navController.navigate(Screens.CalculatorScreen.route)
                                 }
 
-                                Constants.OTHER_APP -> {
-                                    // TODO
+                                Constants.NOTES_APP -> {
+                                    // Navigate to NotesList Screen
+                                    navController.navigate(Screens.NotesListScreen.route)
                                 }
                             }
                         },
