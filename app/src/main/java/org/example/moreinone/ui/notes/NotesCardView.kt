@@ -1,46 +1,57 @@
 package org.example.moreinone.ui.notes
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.example.moreinone.common.utils.SimpleText
 
 @Composable
 fun NotesCardView(
+    title: String,
     noteText: String,
-    onTextChange: (String) -> Unit,
     backgroundColor: Color
 ) {
     Card(
+        shape = RoundedCornerShape(8.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        border = BorderStroke(
+            width = 2.dp,
+            color = Color.Gray
+        ),
         modifier = Modifier
             .padding(8.dp)
-            .fillMaxWidth(),
-        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
-        shape = MaterialTheme.shapes.medium
+            .fillMaxWidth()
     ) {
         Column(
             modifier = Modifier
-                .padding(16.dp)
-                .background(backgroundColor)
+                .fillMaxWidth()
+                .background(color = backgroundColor)
+                .padding(8.dp)
         ) {
-            BasicTextField(
-                value = TextFieldValue(noteText),
-                onValueChange = { value -> onTextChange(value.text) },
-                textStyle = MaterialTheme.typography.bodyMedium.copy(
-                    fontSize = 18.sp,
-                    color = Color.Black
-                ),
-                modifier = Modifier.fillMaxWidth()
+            SimpleText(
+                text = title,
+                textStyle = TextStyle(
+                    fontSize = 20.sp,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold
+                )
+            )
+            SimpleText(
+                text = noteText,
+                textStyle = TextStyle(color = Color.White, fontSize = 15.sp),
+                modifier = Modifier.padding(vertical = 12.dp, horizontal = 4.dp)
             )
         }
     }

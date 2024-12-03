@@ -31,24 +31,32 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import org.example.moreinone.R
 import org.example.moreinone.common.utils.SimpleText
 import org.example.moreinone.common.utils.SimpleTextField
+import org.example.moreinone.model.entities.Notes
+import org.example.moreinone.navigation.Screens
+import org.example.moreinone.viewmodel.NotesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateNotesScreen(navController: NavController) {
 
     val title = remember { mutableStateOf("") }
-    val notes = remember { mutableStateOf("") }
+    val notesDesc = remember { mutableStateOf("") }
 
     val scrollState = rememberScrollState()
 
     var dropDownMenuExpended by remember { mutableStateOf(false) }
+
+    val notesViewModel: NotesViewModel = hiltViewModel()
 
     Scaffold(
         topBar = {
@@ -90,8 +98,20 @@ fun CreateNotesScreen(navController: NavController) {
                         expanded = dropDownMenuExpended,
                         onDismissRequest = { dropDownMenuExpended = false }) {
                         DropdownMenuItem(
-                            text = { SimpleText(text = "Save") },
-                            onClick = { /*TODO*/ })
+                            text = { SimpleText(text = stringResource(id = R.string.save)) },
+                            onClick = {
+                                if (title.value.isNotEmpty() || notesDesc.value.isNotEmpty()) {
+                                    notesViewModel.insertNote(
+                                        Notes(
+                                            title = title.value,
+                                            description = notesDesc.value
+                                        )
+                                    )
+
+                                    // Navigate to NotesList Screen
+                                    navController.navigate(Screens.NotesListScreen.route)
+                                }
+                            })
 
                         HorizontalDivider(
                             Modifier
@@ -101,8 +121,10 @@ fun CreateNotesScreen(navController: NavController) {
                         )
 
                         DropdownMenuItem(
-                            text = { SimpleText(text = "Delete") },
-                            onClick = { /*TODO*/ })
+                            text = { SimpleText(text = stringResource(id = R.string.delete)) },
+                            onClick = {
+                                navController.popBackStack()
+                            })
                     }
                 }
             )
@@ -120,7 +142,11 @@ fun CreateNotesScreen(navController: NavController) {
                 onValueChanges = {
                     title.value = it
                 },
-                textStyle = TextStyle(color = Color.White, fontSize = 25.sp),
+                textStyle = TextStyle(
+                    color = Color.White,
+                    fontSize = 25.sp,
+                    fontWeight = FontWeight.Bold
+                ),
                 hintText = "Title",
                 placeHolderFontSize = 25.sp,
                 modifier = Modifier
@@ -129,11 +155,14 @@ fun CreateNotesScreen(navController: NavController) {
                 textFieldColors = textFieldColors()
             )
             SimpleTextField(
-                textValue = notes.value,
+                textValue = notesDesc.value,
                 onValueChanges = {
-                    notes.value = it
+                    notesDesc.value = it
                 },
-                textStyle = TextStyle(color = Color.White),
+                textStyle = TextStyle(
+                    color = Color.White,
+                    fontSize = 18.sp
+                ),
                 hintText = "Note",
                 modifier = Modifier
                     .fillMaxSize()
