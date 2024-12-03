@@ -21,14 +21,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import org.example.moreinone.R
 import org.example.moreinone.common.utils.MyFloatingActionButton
 import org.example.moreinone.common.utils.MySearchBar
+import org.example.moreinone.navigation.Screens
 import org.example.moreinone.ui.theme.PurpleGrey40
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NotesListScreen() {
+fun NotesListScreen(navController: NavController) {
 
     var searchQuery by remember { mutableStateOf("") }
     var active by remember { mutableStateOf(false) }
@@ -54,7 +56,9 @@ fun NotesListScreen() {
             )
         }, floatingActionButton = {
             MyFloatingActionButton(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    navController.navigate(Screens.CreateNotesScreen.route)
+                },
                 modifier = Modifier
                     .padding(16.dp)
                     .animateContentSize(tween(300)),

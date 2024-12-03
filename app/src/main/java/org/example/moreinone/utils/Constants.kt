@@ -11,6 +11,7 @@ object Constants {
     const val SETTINGS_SCREEN = "settings_screen"
     const val CALCULATOR_SCREEN = "calculator_screen"
     const val NOTES_LIST_SCREEN = "notes_list_screen"
+    const val NOTES_CREATE_SCREEN = "notes_create_screen"
 
     const val TODO_NAV_KEY = "todo_nav_key"
 

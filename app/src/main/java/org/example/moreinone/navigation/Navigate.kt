@@ -9,6 +9,7 @@ import androidx.navigation.navArgument
 import org.example.moreinone.ui.HomeScreen
 import org.example.moreinone.ui.SettingsScreen
 import org.example.moreinone.ui.calculator.CalculatorScreen
+import org.example.moreinone.ui.notes.CreateNotesScreen
 import org.example.moreinone.ui.notes.NotesListScreen
 import org.example.moreinone.ui.todo.TaskCreateScreen
 import org.example.moreinone.ui.todo.TaskListScreen
@@ -22,9 +23,11 @@ fun Navigate() {
         composable(route = Screens.HomeScreen.route) {
             HomeScreen(navController = navController)
         }
+
         composable(route = Screens.TaskListScreen.route) {
             TaskListScreen(navController = navController)
         }
+
         composable(
             route = Screens.TaskCreateScreen.route + "?$TODO_NAV_KEY={$TODO_NAV_KEY}",
             arguments = listOf(
@@ -39,14 +42,21 @@ fun Navigate() {
                 navBackStackEntry.arguments?.getString(TODO_NAV_KEY)
             )
         }
+
         composable(route = Screens.SettingsScreen.route) {
             SettingsScreen(navController)
         }
+
         composable(route = Screens.CalculatorScreen.route) {
             CalculatorScreen()
         }
+
         composable(route = Screens.NotesListScreen.route) {
-            NotesListScreen()
+            NotesListScreen(navController)
+        }
+
+        composable(route = Screens.CreateNotesScreen.route) {
+            CreateNotesScreen(navController)
         }
     }
 }
