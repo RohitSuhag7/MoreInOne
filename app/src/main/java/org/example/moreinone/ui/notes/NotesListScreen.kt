@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.google.gson.Gson
 import org.example.moreinone.R
 import org.example.moreinone.common.utils.EmptyScreen
 import org.example.moreinone.common.utils.MyFloatingActionButton
@@ -32,6 +33,7 @@ import org.example.moreinone.common.utils.MySearchBar
 import org.example.moreinone.model.entities.Notes
 import org.example.moreinone.navigation.Screens
 import org.example.moreinone.ui.theme.PurpleGrey40
+import org.example.moreinone.utils.Constants.NOTES_NAV_KEY
 import org.example.moreinone.viewmodel.NotesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -88,7 +90,11 @@ fun NotesListScreen(navController: NavController) {
                         NotesCardView(
                             title = getAllNotes[index].title.toString(),
                             noteText = getAllNotes[index].description.toString(),
-                            backgroundColor = Color.Black
+                            backgroundColor = Color.Black,
+                            onClick = {
+                                val notesJsonString = Gson().toJson(getAllNotes[index])
+                                navController.navigate(Screens.CreateNotesScreen.route + "?$NOTES_NAV_KEY=$notesJsonString")
+                            }
                         )
                     }
                 }

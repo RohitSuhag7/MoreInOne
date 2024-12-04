@@ -29,10 +29,10 @@ class NotesViewModel @Inject constructor(private val notesRepository: NotesRepos
         }
     }
 
-    fun undoDeletedNote(notes: Notes) {
-        deletedNote?.let {
+    fun undoDeletedNote() {
+        deletedNote?.let { note ->
             viewModelScope.launch(Dispatchers.IO) {
-                notesRepository.insertNotes(notes)
+                notesRepository.insertNotes(note)
             }
         }
     }

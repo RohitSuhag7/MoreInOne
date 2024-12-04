@@ -2,6 +2,7 @@ package org.example.moreinone.ui.notes
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,7 +22,8 @@ import org.example.moreinone.common.utils.SimpleText
 fun NotesCardView(
     title: String,
     noteText: String,
-    backgroundColor: Color
+    backgroundColor: Color,
+    onClick: () -> Unit
 ) {
     Card(
         shape = RoundedCornerShape(8.dp),
@@ -33,6 +35,9 @@ fun NotesCardView(
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth()
+            .clickable {
+                onClick()
+            }
     ) {
         Column(
             modifier = Modifier

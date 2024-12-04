@@ -13,6 +13,7 @@ import org.example.moreinone.ui.notes.CreateNotesScreen
 import org.example.moreinone.ui.notes.NotesListScreen
 import org.example.moreinone.ui.todo.TaskCreateScreen
 import org.example.moreinone.ui.todo.TaskListScreen
+import org.example.moreinone.utils.Constants.NOTES_NAV_KEY
 import org.example.moreinone.utils.Constants.TODO_NAV_KEY
 
 @Composable
@@ -55,8 +56,18 @@ fun Navigate() {
             NotesListScreen(navController)
         }
 
-        composable(route = Screens.CreateNotesScreen.route) {
-            CreateNotesScreen(navController)
+        composable(route = Screens.CreateNotesScreen.route + "?$NOTES_NAV_KEY={$NOTES_NAV_KEY}",
+            arguments = listOf(
+                navArgument(NOTES_NAV_KEY) {
+                    type = NavType.StringType
+                    nullable = true
+                }
+            )
+        ) { navBackStackEntry ->
+            CreateNotesScreen(
+                navController = navController,
+                navBackStackEntry.arguments?.getString(NOTES_NAV_KEY)
+            )
         }
     }
 }

@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.google.gson.Gson
 import org.example.moreinone.R
 import org.example.moreinone.common.utils.SimpleText
 import org.example.moreinone.common.utils.SimpleTextField
@@ -47,10 +48,12 @@ import org.example.moreinone.viewmodel.NotesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateNotesScreen(navController: NavController) {
+fun CreateNotesScreen(navController: NavController, notesJsonString: String?) {
 
-    val title = remember { mutableStateOf("") }
-    val notesDesc = remember { mutableStateOf("") }
+    val note = Gson().fromJson(notesJsonString, Notes::class.java)
+
+    val title = remember { mutableStateOf(note?.title ?: "") }
+    val notesDesc = remember { mutableStateOf(note?.description ?: "") }
 
     val scrollState = rememberScrollState()
 
@@ -103,6 +106,7 @@ fun CreateNotesScreen(navController: NavController) {
                                 if (title.value.isNotEmpty() || notesDesc.value.isNotEmpty()) {
                                     notesViewModel.insertNote(
                                         Notes(
+                                            id = note?.id ?: 0,
                                             title = title.value,
                                             description = notesDesc.value
                                         )
@@ -123,6 +127,9 @@ fun CreateNotesScreen(navController: NavController) {
                         DropdownMenuItem(
                             text = { SimpleText(text = stringResource(id = R.string.delete)) },
                             onClick = {
+                                note?.let {
+                                    notesViewModel.deleteNote(note)
+                                }
                                 navController.popBackStack()
                             })
                     }

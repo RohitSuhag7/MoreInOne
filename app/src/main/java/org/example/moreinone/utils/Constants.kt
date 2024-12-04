@@ -15,6 +15,7 @@ object Constants {
     const val NOTES_CREATE_SCREEN = "notes_create_screen"
 
     const val TODO_NAV_KEY = "todo_nav_key"
+    const val NOTES_NAV_KEY = "notes_nav_key"
 
     const val ONE_DAY_TIME = 60 * 60 * 1000 * 24
 
