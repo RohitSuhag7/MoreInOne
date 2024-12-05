@@ -2,12 +2,17 @@ package org.example.moreinone.ui.notes
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
@@ -18,18 +23,20 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TextFieldColors
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -42,8 +49,18 @@ import com.google.gson.Gson
 import org.example.moreinone.R
 import org.example.moreinone.common.utils.SimpleText
 import org.example.moreinone.common.utils.SimpleTextField
+import org.example.moreinone.common.utils.textFieldColors
 import org.example.moreinone.model.entities.Notes
 import org.example.moreinone.navigation.Screens
+import org.example.moreinone.ui.theme.BrightPurple
+import org.example.moreinone.ui.theme.DarkPurple
+import org.example.moreinone.ui.theme.LightGrey
+import org.example.moreinone.ui.theme.Pink40
+import org.example.moreinone.ui.theme.Pink80
+import org.example.moreinone.ui.theme.Purple40
+import org.example.moreinone.ui.theme.Purple80
+import org.example.moreinone.ui.theme.PurpleGrey40
+import org.example.moreinone.ui.theme.PurpleGrey80
 import org.example.moreinone.viewmodel.NotesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,6 +71,8 @@ fun CreateNotesScreen(navController: NavController, notesJsonString: String?) {
 
     val title = remember { mutableStateOf(note?.title ?: "") }
     val notesDesc = remember { mutableStateOf(note?.description ?: "") }
+    val notesBackground =
+        remember { mutableIntStateOf(note?.backgroundColor ?: Color.Black.toArgb()) }
 
     val scrollState = rememberScrollState()
 
@@ -61,15 +80,51 @@ fun CreateNotesScreen(navController: NavController, notesJsonString: String?) {
 
     val notesViewModel: NotesViewModel = hiltViewModel()
 
+    var showBottomSheet by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
+
+    val chooseNotesBackgroundList =
+        listOf(
+            Color.Black,
+            Color.Gray,
+            Color.LightGray,
+            Color.Red,
+            Color.Magenta,
+            Color.Cyan,
+            Purple80,
+            Purple40,
+            PurpleGrey80,
+            PurpleGrey40,
+            Pink80,
+            Pink40,
+            DarkPurple,
+            BrightPurple,
+            LightGrey
+
+        )
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {},
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.Black
+                    containerColor = Color(notesBackground.intValue)
                 ),
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = {
+                        if (title.value.isNotEmpty() || notesDesc.value.isNotEmpty()) {
+                            saveNotes(
+                                id = note?.id,
+                                title = title.value,
+                                notesDesc = notesDesc.value,
+                                notesBackground = notesBackground.intValue,
+                                notesViewModel = notesViewModel,
+                                navController = navController
+                            )
+                        } else {
+                            navController.popBackStack()
+                        }
+                    }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                             contentDescription = null,
@@ -78,7 +133,9 @@ fun CreateNotesScreen(navController: NavController, notesJsonString: String?) {
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = {
+                        showBottomSheet = true
+                    }) {
                         Icon(
                             painter = painterResource(id = R.drawable.color_palette),
                             contentDescription = "Color Change Icon",
@@ -104,16 +161,14 @@ fun CreateNotesScreen(navController: NavController, notesJsonString: String?) {
                             text = { SimpleText(text = stringResource(id = R.string.save)) },
                             onClick = {
                                 if (title.value.isNotEmpty() || notesDesc.value.isNotEmpty()) {
-                                    notesViewModel.insertNote(
-                                        Notes(
-                                            id = note?.id ?: 0,
-                                            title = title.value,
-                                            description = notesDesc.value
-                                        )
+                                    saveNotes(
+                                        id = note?.id,
+                                        title = title.value,
+                                        notesDesc = notesDesc.value,
+                                        notesBackground = notesBackground.intValue,
+                                        notesViewModel = notesViewModel,
+                                        navController = navController
                                     )
-
-                                    // Navigate to NotesList Screen
-                                    navController.navigate(Screens.NotesListScreen.route)
                                 }
                             })
 
@@ -140,7 +195,7 @@ fun CreateNotesScreen(navController: NavController, notesJsonString: String?) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Black)
+                .background(Color(notesBackground.intValue))
                 .verticalScroll(scrollState)
                 .padding(paddingValues)
         ) {
@@ -159,7 +214,7 @@ fun CreateNotesScreen(navController: NavController, notesJsonString: String?) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 16.dp, end = 16.dp, top = 16.dp),
-                textFieldColors = textFieldColors()
+                textFieldColors = textFieldColors(textFieldColor = Color(notesBackground.intValue))
             )
             SimpleTextField(
                 textValue = notesDesc.value,
@@ -174,21 +229,72 @@ fun CreateNotesScreen(navController: NavController, notesJsonString: String?) {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 16.dp),
-                textFieldColors = textFieldColors()
+                textFieldColors = textFieldColors(textFieldColor = Color(notesBackground.intValue))
             )
+        }
+
+        // Show Bottom Sheet drawer when click on Choose notes background color icon
+        if (showBottomSheet) {
+            ModalBottomSheet(
+                sheetState = sheetState,
+                onDismissRequest = {
+                    showBottomSheet = false
+                },
+                containerColor = Color.DarkGray
+            ) {
+                SimpleText(
+                    text = "Colour",
+                    textColor = Color.White,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                )
+
+                LazyRow(
+                    modifier = Modifier.padding(
+                        start = 16.dp,
+                        end = 16.dp,
+                        bottom = 50.dp,
+                        top = 8.dp
+                    ),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    userScrollEnabled = true
+                ) {
+                    items(chooseNotesBackgroundList.size) { index ->
+                        Box(
+                            modifier = Modifier
+                                .size(50.dp)
+                                .background(
+                                    color = chooseNotesBackgroundList[index],
+                                    shape = CircleShape
+                                )
+                                .clickable {
+                                    notesBackground.intValue =
+                                        chooseNotesBackgroundList[index].toArgb()
+                                },
+                        )
+                    }
+                }
+            }
         }
     }
 }
 
-@Composable
-fun textFieldColors(): TextFieldColors {
-    return TextFieldDefaults.colors(
-        focusedContainerColor = Color.Black,
-        unfocusedContainerColor = Color.Black,
-        disabledContainerColor = Color.Black,
-        cursorColor = Color.White,
-        focusedIndicatorColor = Color.Transparent,
-        unfocusedIndicatorColor = Color.Transparent,
-        disabledIndicatorColor = Color.Transparent
+private fun saveNotes(
+    id: Int?,
+    title: String,
+    notesDesc: String,
+    notesBackground: Int,
+    notesViewModel: NotesViewModel,
+    navController: NavController
+) {
+    notesViewModel.insertNote(
+        Notes(
+            id = id ?: 0,
+            title = title,
+            description = notesDesc,
+            backgroundColor = notesBackground
+        )
     )
+
+    // Navigate to NotesList Screen
+    navController.navigate(Screens.NotesListScreen.route)
 }

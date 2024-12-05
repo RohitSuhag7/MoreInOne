@@ -90,7 +90,7 @@ fun NotesListScreen(navController: NavController) {
                         NotesCardView(
                             title = getAllNotes[index].title.toString(),
                             noteText = getAllNotes[index].description.toString(),
-                            backgroundColor = Color.Black,
+                            backgroundColor = Color(getAllNotes[index].backgroundColor!!),
                             onClick = {
                                 val notesJsonString = Gson().toJson(getAllNotes[index])
                                 navController.navigate(Screens.CreateNotesScreen.route + "?$NOTES_NAV_KEY=$notesJsonString")
