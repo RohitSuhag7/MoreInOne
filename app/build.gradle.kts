@@ -96,4 +96,7 @@ dependencies {
 
     // Biometric
     implementation(libs.androidx.biometric)
+
+    // Calculator Result Library
+    implementation (libs.exp4j)
 }

@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import org.example.moreinone.ui.HomeScreen
 import org.example.moreinone.ui.SettingsScreen
+import org.example.moreinone.ui.calculator.CalculatorScreen
 import org.example.moreinone.ui.todo.TaskCreateScreen
 import org.example.moreinone.ui.todo.TaskListScreen
 import org.example.moreinone.utils.Constants.TODO_NAV_KEY
@@ -39,6 +40,9 @@ fun Navigate() {
         }
         composable(route = Screens.SettingsScreen.route) {
             SettingsScreen(navController)
+        }
+        composable(route = Screens.CalculatorScreen.route) {
+            CalculatorScreen()
         }
     }
 }
