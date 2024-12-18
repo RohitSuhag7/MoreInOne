@@ -1,58 +1,77 @@
 package org.example.moreinone.common.utils
 
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Icon
-import androidx.compose.material3.SearchBar
-import androidx.compose.material3.SearchBarColors
-import androidx.compose.material3.Text
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MySearchBar(
     query: String,
     onQueryChange: (String) -> Unit,
-    onSearch: (String) -> Unit,
-    active: Boolean,
-    onActiveChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
-    colors: SearchBarColors,
+    textStyle: TextStyle = TextStyle(),
     placeholderText: String,
     placeholderTextTint: Color = Color.White,
     leadingIconImageVector: ImageVector,
-    leadingIconTint: Color = Color.White
+    leadingIconTint: Color = Color.White,
+    onClickLeadingIcon: () -> Unit,
+    onClickTrailingIcon: () -> Unit,
+    colors: TextFieldColors = OutlinedTextFieldDefaults.colors(),
+    onKeyboardSearchClick: () -> Unit
 ) {
-    SearchBar(
-        query = query,
-        onQueryChange = {
+    OutlinedTextField(
+        value = query,
+        onValueChange = {
             onQueryChange(it)
         },
-        onSearch = {
-            onSearch(it)
-        },
-        active = active,
-        onActiveChange = {
-            onActiveChange(it)
-        },
         modifier = modifier,
-        colors = colors,
+        textStyle = textStyle,
         placeholder = {
-            Text(
+            SimpleText(
                 text = placeholderText,
-                color = placeholderTextTint
+                textColor = placeholderTextTint
             )
-        },
-        leadingIcon = {
+        }, leadingIcon = {
             Icon(
                 imageVector = leadingIconImageVector,
-                contentDescription = "",
-                tint = leadingIconTint
+                contentDescription = "leading back arrow icon",
+                tint = leadingIconTint,
+                modifier = Modifier.clickable {
+                    onClickLeadingIcon()
+                }
             )
-        }
-    ) {
-
-    }
+        },
+        trailingIcon = {
+            Icon(
+                imageVector = Icons.Filled.Clear,
+                contentDescription = "",
+                tint = Color.White,
+                modifier = Modifier.clickable {
+                    onClickTrailingIcon()
+                }
+            )
+        },
+        singleLine = true,
+        colors = colors,
+        keyboardOptions = KeyboardOptions(
+            imeAction = ImeAction.Search
+        ),
+        keyboardActions = KeyboardActions(
+            onSearch = {
+                onKeyboardSearchClick()
+            }
+        )
+    )
 }

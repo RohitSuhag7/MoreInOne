@@ -10,7 +10,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -39,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -86,8 +86,8 @@ fun TaskListScreen(navController: NavController) {
                         dropDownMenuExpended = !dropDownMenuExpended
                     }) {
                         Icon(
-                            imageVector = Icons.Filled.MoreVert,
-                            contentDescription = "More Icon"
+                            painter = painterResource(id = R.drawable.ic_sort),
+                            contentDescription = "Sort Icon"
                         )
                     }
 
@@ -95,12 +95,12 @@ fun TaskListScreen(navController: NavController) {
                         expanded = dropDownMenuExpended,
                         onDismissRequest = { dropDownMenuExpended = false }) {
                         DropdownMenuItem(
-                            text = { SimpleText(text = "Important") },
+                            text = { SimpleText(text = "Sort Important") },
                             onClick = {
                                 isSorted = true
                             })
                         DropdownMenuItem(
-                            text = { SimpleText(text = "Unimportant") },
+                            text = { SimpleText(text = "No Sort") },
                             onClick = {
                                 isSorted = false
                             })

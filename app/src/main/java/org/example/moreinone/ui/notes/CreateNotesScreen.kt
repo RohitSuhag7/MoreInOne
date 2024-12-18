@@ -100,7 +100,6 @@ fun CreateNotesScreen(navController: NavController, notesJsonString: String?) {
             DarkPurple,
             BrightPurple,
             LightGrey
-
         )
 
     Scaffold(

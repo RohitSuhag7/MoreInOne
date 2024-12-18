@@ -11,7 +11,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun EmptyScreen(text: String, paddingValues: PaddingValues) {
+fun EmptyScreen(
+    text: String,
+    textStyle: TextStyle = TextStyle(fontSize = 28.sp),
+    paddingValues: PaddingValues
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -20,7 +24,7 @@ fun EmptyScreen(text: String, paddingValues: PaddingValues) {
     ) {
         SimpleText(
             text = text,
-            textStyle = TextStyle(fontSize = 28.sp)
+            textStyle = textStyle
         )
     }
 }
