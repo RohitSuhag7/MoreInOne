@@ -1,5 +1,6 @@
 package org.example.moreinone.ui.notes
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -75,11 +76,9 @@ fun CreateNotesScreen(navController: NavController, notesJsonString: String?) {
         remember { mutableIntStateOf(note?.backgroundColor ?: Color.Black.toArgb()) }
 
     val scrollState = rememberScrollState()
-
-    var dropDownMenuExpended by remember { mutableStateOf(false) }
-
     val notesViewModel: NotesViewModel = hiltViewModel()
 
+    var dropDownMenuExpended by remember { mutableStateOf(false) }
     var showBottomSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
 
@@ -274,6 +273,22 @@ fun CreateNotesScreen(navController: NavController, notesJsonString: String?) {
                 }
             }
         }
+
+        // Handle Back Press
+        BackHandler {
+            if (title.value.isNotEmpty() || notesDesc.value.isNotEmpty()) {
+                saveNotes(
+                    id = note?.id,
+                    title = title.value,
+                    notesDesc = notesDesc.value,
+                    notesBackground = notesBackground.intValue,
+                    notesViewModel = notesViewModel,
+                    navController = navController
+                )
+            } else {
+                navController.popBackStack()
+            }
+        }
     }
 }
 
@@ -295,5 +310,8 @@ private fun saveNotes(
     )
 
     // Navigate to NotesList Screen
-    navController.navigate(Screens.NotesListScreen.route)
+    navController.navigate(Screens.NotesListScreen.route) {
+        popUpTo(route = Screens.CreateNotesScreen.route) { inclusive = true }
+        launchSingleTop = true
+    }
 }
