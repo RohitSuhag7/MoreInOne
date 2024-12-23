@@ -1,5 +1,6 @@
 package org.example.moreinone.ui.notes
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -45,19 +46,23 @@ fun NotesCardView(
                 .background(color = backgroundColor)
                 .padding(8.dp)
         ) {
-            SimpleText(
-                text = title,
-                textStyle = TextStyle(
-                    fontSize = 20.sp,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold
+            AnimatedVisibility(visible = title.isNotEmpty()) {
+                SimpleText(
+                    text = title,
+                    textStyle = TextStyle(
+                        fontSize = 20.sp,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
+                    )
                 )
-            )
-            SimpleText(
-                text = noteText,
-                textStyle = TextStyle(color = Color.White, fontSize = 15.sp),
-                modifier = Modifier.padding(vertical = 12.dp, horizontal = 4.dp)
-            )
+            }
+            AnimatedVisibility(visible = noteText.isNotEmpty()) {
+                SimpleText(
+                    text = noteText,
+                    textStyle = TextStyle(color = Color.White, fontSize = 15.sp),
+                    modifier = Modifier.padding(vertical = 12.dp, horizontal = 4.dp)
+                )
+            }
         }
     }
 }

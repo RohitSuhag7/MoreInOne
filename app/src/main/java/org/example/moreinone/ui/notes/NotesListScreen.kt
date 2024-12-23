@@ -61,6 +61,7 @@ fun NotesListScreen(navController: NavController) {
 
     var searchQuery by remember { mutableStateOf("") }
 
+    // Using filter for searching in all notes
     val filteredNotes = getAllNotes.filter {
         it.title?.contains(searchQuery, ignoreCase = true)!! ||
                 it.description?.contains(searchQuery, ignoreCase = true)!!
@@ -167,11 +168,11 @@ fun NotesListScreen(navController: NavController) {
                 LazyVerticalStaggeredGrid(columns = StaggeredGridCells.Fixed(2)) {
                     items(filteredNotes.size) { index ->
                         NotesCardView(
-                            title = getAllNotes[index].title.toString(),
-                            noteText = getAllNotes[index].description.toString(),
-                            backgroundColor = Color(getAllNotes[index].backgroundColor!!),
+                            title = filteredNotes[index].title.toString(),
+                            noteText = filteredNotes[index].description.toString(),
+                            backgroundColor = Color(filteredNotes[index].backgroundColor!!),
                             onClick = {
-                                val notesJsonString = Gson().toJson(getAllNotes[index])
+                                val notesJsonString = Gson().toJson(filteredNotes[index])
                                 navController.navigate(Screens.CreateNotesScreen.route + "?$NOTES_NAV_KEY=$notesJsonString")
                             }
                         )
