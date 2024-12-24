@@ -3,17 +3,12 @@ package org.example.moreinone.ui.notes
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
@@ -24,11 +19,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -53,15 +46,6 @@ import org.example.moreinone.common.utils.SimpleTextField
 import org.example.moreinone.common.utils.textFieldColors
 import org.example.moreinone.model.entities.Notes
 import org.example.moreinone.navigation.Screens
-import org.example.moreinone.ui.theme.BrightPurple
-import org.example.moreinone.ui.theme.DarkPurple
-import org.example.moreinone.ui.theme.LightGrey
-import org.example.moreinone.ui.theme.Pink40
-import org.example.moreinone.ui.theme.Pink80
-import org.example.moreinone.ui.theme.Purple40
-import org.example.moreinone.ui.theme.Purple80
-import org.example.moreinone.ui.theme.PurpleGrey40
-import org.example.moreinone.ui.theme.PurpleGrey80
 import org.example.moreinone.viewmodel.NotesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -80,26 +64,6 @@ fun CreateNotesScreen(navController: NavController, notesJsonString: String?) {
 
     var dropDownMenuExpended by remember { mutableStateOf(false) }
     var showBottomSheet by remember { mutableStateOf(false) }
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
-
-    val chooseNotesBackgroundList =
-        listOf(
-            Color.Black,
-            Color.Gray,
-            Color.LightGray,
-            Color.Red,
-            Color.Magenta,
-            Color.Cyan,
-            Purple80,
-            Purple40,
-            PurpleGrey80,
-            PurpleGrey40,
-            Pink80,
-            Pink40,
-            DarkPurple,
-            BrightPurple,
-            LightGrey
-        )
 
     Scaffold(
         topBar = {
@@ -233,45 +197,11 @@ fun CreateNotesScreen(navController: NavController, notesJsonString: String?) {
 
         // Show Bottom Sheet drawer when click on Choose notes background color icon
         if (showBottomSheet) {
-            ModalBottomSheet(
-                sheetState = sheetState,
-                onDismissRequest = {
+            ColorBottomSheet(
+                sheetBackground = notesBackground,
+                onDismiss = {
                     showBottomSheet = false
-                },
-                containerColor = Color.DarkGray
-            ) {
-                SimpleText(
-                    text = "Colour",
-                    textColor = Color.White,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                )
-
-                LazyRow(
-                    modifier = Modifier.padding(
-                        start = 16.dp,
-                        end = 16.dp,
-                        bottom = 50.dp,
-                        top = 8.dp
-                    ),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    userScrollEnabled = true
-                ) {
-                    items(chooseNotesBackgroundList.size) { index ->
-                        Box(
-                            modifier = Modifier
-                                .size(50.dp)
-                                .background(
-                                    color = chooseNotesBackgroundList[index],
-                                    shape = CircleShape
-                                )
-                                .clickable {
-                                    notesBackground.intValue =
-                                        chooseNotesBackgroundList[index].toArgb()
-                                },
-                        )
-                    }
-                }
-            }
+                })
         }
 
         // Handle Back Press

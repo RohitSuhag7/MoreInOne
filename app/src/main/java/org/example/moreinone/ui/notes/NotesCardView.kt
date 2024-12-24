@@ -2,8 +2,9 @@ package org.example.moreinone.ui.notes
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -19,26 +20,32 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.example.moreinone.common.utils.SimpleText
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NotesCardView(
     title: String,
     noteText: String,
     backgroundColor: Color,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onLongClick: () -> Unit,
+    cardBorderColor: Color = Color.Gray
 ) {
     Card(
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         border = BorderStroke(
             width = 2.dp,
-            color = Color.Gray
+            color = cardBorderColor
         ),
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth()
-            .clickable {
-                onClick()
-            }
+            .combinedClickable(
+                onClick = { onClick() },
+                onLongClick = {
+                    onLongClick()
+                }
+            )
     ) {
         Column(
             modifier = Modifier

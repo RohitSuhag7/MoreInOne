@@ -1,26 +1,19 @@
 package org.example.moreinone.ui.notes
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -33,8 +26,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -49,7 +40,7 @@ import org.example.moreinone.navigation.Screens
 import org.example.moreinone.utils.Constants.NOTES_NAV_KEY
 import org.example.moreinone.viewmodel.NotesViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("MutableCollectionMutableState")
 @Composable
 fun NotesListScreen(navController: NavController) {
 
@@ -69,6 +60,14 @@ fun NotesListScreen(navController: NavController) {
 
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
+
+    val isLongClicked = remember { mutableStateOf(false) }
+
+    // Track selected state for each card by its index
+    val selectedCards = remember { mutableStateOf(mutableMapOf<Int, Boolean>()) }
+
+    // Count of selected cards
+    val selectedCount = selectedCards.value.filter { it.value }.size
 
     Scaffold(
         topBar = {
@@ -114,31 +113,24 @@ fun NotesListScreen(navController: NavController) {
                         }
                     )
                 } else {
-                    TopAppBar(title = {
-                        Text(
-                            text = stringResource(R.string.notes),
-                            fontSize = 40.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White,
-                            fontFamily = FontFamily.Cursive
-                        )
-                    },
-                        colors = TopAppBarDefaults.topAppBarColors(
-                            containerColor = Color.Black
-                        ),
-                        actions = {
-                            IconButton(onClick = {
-                                searchStateHandler = true
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Rounded.Search,
-                                    contentDescription = "search icon",
-                                    tint = Color.White,
-                                    modifier = Modifier.size(30.dp)
-                                )
+                    if (isLongClicked.value) {
+                        LongClickTopAppVar(
+                            titleText = selectedCount.toString(),
+                            onCancelClick = {
+                                isLongClicked.value = false
+                                selectedCards.value = mutableMapOf()
+                            },
+                            onDeleteClick = {
+                                // TODO
                             }
-                        }
-                    )
+                        )
+                    } else {
+                        DefaultAppBar(
+                            onSearchClick = {
+                                searchStateHandler = true
+                            }
+                        )
+                    }
                 }
             }
         }, floatingActionButton = {
@@ -167,15 +159,33 @@ fun NotesListScreen(navController: NavController) {
             ) {
                 LazyVerticalStaggeredGrid(columns = StaggeredGridCells.Fixed(2)) {
                     items(filteredNotes.size) { index ->
+                        val isSelected = selectedCards.value[index] ?: false
+
                         NotesCardView(
                             title = filteredNotes[index].title.toString(),
                             noteText = filteredNotes[index].description.toString(),
                             backgroundColor = Color(filteredNotes[index].backgroundColor!!),
                             onClick = {
-                                val notesJsonString = Gson().toJson(filteredNotes[index])
-                                navController.navigate(Screens.CreateNotesScreen.route + "?$NOTES_NAV_KEY=$notesJsonString")
-                            }
+                                if (isSelected || isLongClicked.value) {
+                                    selectedCards.value = selectedCards.value.toMutableMap().apply {
+                                        this[index] = !(this[index] ?: false)
+                                    }
+                                } else {
+                                    val notesJsonString = Gson().toJson(filteredNotes[index])
+                                    navController.navigate(Screens.CreateNotesScreen.route + "?$NOTES_NAV_KEY=$notesJsonString")
+                                }
+                            },
+                            onLongClick = {
+                                isLongClicked.value = true
+                                selectedCards.value = selectedCards.value.toMutableMap().apply {
+                                    this[index] = !(this[index] ?: false)
+                                }
+                            },
+                            cardBorderColor = if (isSelected) Color.Cyan else Color.Gray
                         )
+
+                        // If no cards are selected, set isLongClicked to false
+                        if (selectedCount == 0) isLongClicked.value = false
                     }
                 }
             }
