@@ -14,14 +14,18 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -35,6 +39,7 @@ import org.example.moreinone.R
 import org.example.moreinone.common.utils.EmptyScreen
 import org.example.moreinone.common.utils.MyFloatingActionButton
 import org.example.moreinone.common.utils.MySearchBar
+import org.example.moreinone.common.utils.mySnackbar
 import org.example.moreinone.model.entities.Notes
 import org.example.moreinone.navigation.Screens
 import org.example.moreinone.utils.Constants.NOTES_NAV_KEY
@@ -69,7 +74,13 @@ fun NotesListScreen(navController: NavController) {
     // Count of selected cards
     val selectedCount = selectedCards.value.filter { it.value }.size
 
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
+    val mContext = LocalContext.current
+
     Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             Crossfade(
                 targetState = searchStateHandler,
@@ -121,7 +132,28 @@ fun NotesListScreen(navController: NavController) {
                                 selectedCards.value = mutableMapOf()
                             },
                             onDeleteClick = {
-                                // TODO
+                                // Collect the selected notes
+                                val notesToDelete = filteredNotes.filterIndexed { index, _ ->
+                                    selectedCards.value[index] == true
+                                }
+
+                                notesToDelete.forEach { note ->
+                                    notesViewModel.deleteNote(note)
+                                }
+
+                                mySnackbar(
+                                    scope = scope,
+                                    snackbarHostState = snackbarHostState,
+                                    msg = "Note Deleted!",
+                                    actionLabel = mContext.getString(R.string.undo),
+                                    onAction = {
+                                        notesViewModel.undoDeletedNote()
+                                    }
+                                )
+
+                                // Reset the selection state
+                                selectedCards.value = mutableMapOf()
+                                isLongClicked.value = false
                             }
                         )
                     } else {

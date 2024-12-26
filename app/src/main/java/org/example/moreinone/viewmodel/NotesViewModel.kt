@@ -12,7 +12,7 @@ import javax.inject.Inject
 @HiltViewModel
 class NotesViewModel @Inject constructor(private val notesRepository: NotesRepository) : ViewModel() {
 
-    private var deletedNote: Notes? = null
+    private val deletedNotes = mutableListOf<Notes>()
 
     val getAllNotes = notesRepository.getAllNotes()
 
@@ -24,14 +24,14 @@ class NotesViewModel @Inject constructor(private val notesRepository: NotesRepos
 
     fun deleteNote(notes: Notes) {
         viewModelScope.launch(Dispatchers.IO) {
-            deletedNote = notes
+            deletedNotes.addAll(listOf(notes))
             notesRepository.deleteNotes(notes)
         }
     }
 
     fun undoDeletedNote() {
-        deletedNote?.let { note ->
-            viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
+            deletedNotes.forEach { note ->
                 notesRepository.insertNotes(note)
             }
         }
