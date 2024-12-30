@@ -1,4 +1,4 @@
-package org.example.moreinone.common
+package org.example.moreinone.common.utils
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text

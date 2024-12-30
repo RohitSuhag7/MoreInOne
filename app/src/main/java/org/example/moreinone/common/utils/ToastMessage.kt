@@ -1,4 +1,4 @@
-package org.example.moreinone.common
+package org.example.moreinone.common.utils
 
 import android.content.Context
 import android.widget.Toast

@@ -34,17 +34,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import org.example.moreinone.R
-import org.example.moreinone.common.SimpleText
+import org.example.moreinone.common.utils.SimpleText
 import org.example.moreinone.navigation.Screens
+import org.example.moreinone.ui.theme.LightGreen
+import org.example.moreinone.ui.theme.Purple40
 import org.example.moreinone.utils.Constants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavController) {
 
-    val applicationOptionsList = listOf("TODO", "Calculator", "Other")
+    val applicationOptionsList = listOf("TODO", "Calculator", "Notes")
     val colorsList =
-        listOf(Color.Cyan, Color.Yellow, Color.Magenta, Color.Gray, Color.Blue, Color.Green)
+        listOf(LightGreen, Color.Yellow, Purple40, Color.Gray, Color.Blue, Color.Green, Color.Cyan)
 
     Scaffold(
         topBar = {
@@ -70,7 +72,7 @@ fun HomeScreen(navController: NavController) {
         },
         content = { paddingValues ->
             LazyVerticalGrid(
-                columns = GridCells.Adaptive(minSize = 128.dp),
+                columns = GridCells.Fixed(2),
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
                 modifier = Modifier.padding(paddingValues)
             ) {
@@ -88,8 +90,9 @@ fun HomeScreen(navController: NavController) {
                                     navController.navigate(Screens.CalculatorScreen.route)
                                 }
 
-                                Constants.OTHER_APP -> {
-                                    // TODO
+                                Constants.NOTES_APP -> {
+                                    // Navigate to NotesList Screen
+                                    navController.navigate(Screens.NotesListScreen.route)
                                 }
                             }
                         },

@@ -12,6 +12,7 @@
     <string name="create">Create</string>
     <string name="update">Update</string>
     <string name="no_tasks">No Tasks!</string>
+    <string name="no_notes_available">No Notes Available!</string>
     <string name="create_task">Create Task</string>
     <string name="update_task">Update Task</string>
     <string name="please_enter_valid_data">Please enter valid data!</string>
@@ -35,4 +36,8 @@
     <string name="no">No</string>
     <string name="ok">OK</string>
     <string name="home_screen">Home Screen</string>
+    <string name="search_your_notes">Search your notes</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="notes">Notes</string>
 </resources>
