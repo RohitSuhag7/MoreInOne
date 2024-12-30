@@ -1,6 +1,7 @@
 package org.example.moreinone.ui.notes
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,11 +9,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableIntState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -56,7 +61,10 @@ fun ColorBottomSheet(sheetBackground: MutableIntState, onDismiss: () -> Unit) {
         onDismissRequest = {
             onDismiss()
         },
-        containerColor = Color.DarkGray
+        containerColor = if (sheetBackground.intValue == Color.Black.toArgb())
+            Color.DarkGray
+        else
+            Color(sheetBackground.intValue)
     ) {
         SimpleText(
             text = "Colour",
@@ -78,6 +86,15 @@ fun ColorBottomSheet(sheetBackground: MutableIntState, onDismiss: () -> Unit) {
                 Box(
                     modifier = Modifier
                         .size(50.dp)
+                        .border(
+                            width = 2.dp,
+                            if (chooseNotesBackgroundList[index].toArgb() == sheetBackground.intValue) {
+                                Color.Cyan
+                            } else {
+                                Color.Unspecified
+                            },
+                            shape = CircleShape
+                        )
                         .background(
                             color = chooseNotesBackgroundList[index],
                             shape = CircleShape
@@ -86,7 +103,18 @@ fun ColorBottomSheet(sheetBackground: MutableIntState, onDismiss: () -> Unit) {
                             sheetBackground.intValue =
                                 chooseNotesBackgroundList[index].toArgb()
                         },
-                )
+                ) {
+                    if (chooseNotesBackgroundList[index].toArgb() == sheetBackground.intValue) {
+                        Icon(
+                            imageVector = Icons.Filled.Check,
+                            contentDescription = "check mark",
+                            modifier = Modifier
+                                .size(35.dp)
+                                .align(Alignment.Center),
+                            tint = Color.Cyan
+                        )
+                    }
+                }
             }
         }
     }

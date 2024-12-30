@@ -23,6 +23,7 @@ class NotesViewModel @Inject constructor(private val notesRepository: NotesRepos
     }
 
     fun deleteNote(notes: Notes) {
+        deletedNotes.clear()
         viewModelScope.launch(Dispatchers.IO) {
             deletedNotes.addAll(listOf(notes))
             notesRepository.deleteNotes(notes)
