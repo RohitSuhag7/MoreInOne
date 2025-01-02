@@ -44,7 +44,7 @@ import org.example.moreinone.utils.Constants
 @Composable
 fun HomeScreen(navController: NavController) {
 
-    val applicationOptionsList = listOf("TODO", "Calculator", "Notes")
+    val applicationOptionsList = listOf("TODO", "Calculator", "Notes", "Clock")
     val colorsList =
         listOf(LightGreen, Color.Yellow, Purple40, Color.Gray, Color.Blue, Color.Green, Color.Cyan)
 
@@ -93,6 +93,10 @@ fun HomeScreen(navController: NavController) {
                                 Constants.NOTES_APP -> {
                                     // Navigate to NotesList Screen
                                     navController.navigate(Screens.NotesListScreen.route)
+                                }
+                                Constants.CLOCK_APP -> {
+                                    // Navigate to Clock Screen
+                                    navController.navigate(Screens.ClockScreen.route)
                                 }
                             }
                         },

@@ -9,6 +9,7 @@ import androidx.navigation.navArgument
 import org.example.moreinone.ui.HomeScreen
 import org.example.moreinone.ui.SettingsScreen
 import org.example.moreinone.ui.calculator.CalculatorScreen
+import org.example.moreinone.ui.clock.ClockBottomNavigation
 import org.example.moreinone.ui.notes.CreateNotesScreen
 import org.example.moreinone.ui.notes.NotesListScreen
 import org.example.moreinone.ui.todo.TaskCreateScreen
@@ -68,6 +69,10 @@ fun Navigate() {
                 navController = navController,
                 navBackStackEntry.arguments?.getString(NOTES_NAV_KEY)
             )
+        }
+
+        composable(route = Screens.ClockScreen.route) {
+            ClockBottomNavigation()
         }
     }
 }

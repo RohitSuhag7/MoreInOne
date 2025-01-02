@@ -13,6 +13,9 @@ object Constants {
     const val CALCULATOR_SCREEN = "calculator_screen"
     const val NOTES_LIST_SCREEN = "notes_list_screen"
     const val NOTES_CREATE_SCREEN = "notes_create_screen"
+    const val CLOCK_SCREEN = "clock_screen"
+    const val ALARM_SCREEN = "alarm_screen"
+    const val STOPWATCH_SCREEN = "stopwatch_screen"
 
     const val TODO_NAV_KEY = "todo_nav_key"
     const val NOTES_NAV_KEY = "notes_nav_key"
@@ -29,4 +32,5 @@ object Constants {
     const val TODO_APP = "TODO"
     const val CALCULATOR_APP = "Calculator"
     const val NOTES_APP = "Notes"
+    const val CLOCK_APP = "Clock"
 }

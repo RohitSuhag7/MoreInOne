@@ -40,4 +40,6 @@
     <string name="save">Save</string>
     <string name="delete">Delete</string>
     <string name="notes">Notes</string>
+    <string name="alarm">Alarm</string>
+    <string name="stopwatch">Stopwatch</string>
 </resources>
