@@ -42,4 +42,8 @@
     <string name="notes">Notes</string>
     <string name="alarm">Alarm</string>
     <string name="stopwatch">Stopwatch</string>
+    <string name="hour">%1$s:</string>
+    <string name="minutes">%1$s:</string>
+    <string name="seconds">%1$s</string>
+    <string name="milliseconds">%1$s</string>
 </resources>
