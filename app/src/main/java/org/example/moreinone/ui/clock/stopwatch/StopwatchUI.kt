@@ -1,7 +1,6 @@
 package org.example.moreinone.ui.clock.stopwatch
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,8 +17,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -28,11 +24,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.example.moreinone.R
+import org.example.moreinone.common.utils.MyFloatingActionButton
 import org.example.moreinone.common.utils.SimpleText
 import org.example.moreinone.ui.theme.LightViolet
 import org.example.moreinone.ui.theme.Purple
@@ -47,7 +45,6 @@ fun StopwatchDisplay(
     hourVisible: Boolean = false,
     minutesVisible: Boolean = false,
 ) {
-
     Box(
         modifier = Modifier
             .size(300.dp)
@@ -105,7 +102,6 @@ fun StopwatchLapDisplay(lapList: List<Pair<Int, String>>) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(100.dp)
         ) {
             LazyColumn(
                 state = listState,
@@ -141,49 +137,41 @@ fun StopwatchControls(
 ) {
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 32.dp),
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
-        IconButton(
+
+        MyFloatingActionButton(
             onClick = onResetClick,
+            imageVector = Icons.Filled.Refresh,
             modifier = Modifier
                 .size(60.dp)
                 .clip(CircleShape)
-                .alpha(if (elapsedTime == 0L) 0f else 1f)
-                .background(color = Purple)
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Refresh,
-                contentDescription = "reset"
-            )
-        }
-        IconButton(
+                .alpha(if (elapsedTime == 0L) 0f else 1f),
+            containerColor = Purple
+        )
+
+        MyFloatingActionButton(
             onClick = onPlayPauseClick,
+            imageVector = ImageVector.vectorResource(
+                id = if (isStopwatchRunning) R.drawable.ic_pause else R.drawable.ic_play_arrow
+            ),
+            tint = Color.Black,
             modifier = Modifier
                 .size(100.dp)
-                .clip(CircleShape)
-                .background(color = LightViolet)
-        ) {
-            Icon(
-                painterResource(id = if (isStopwatchRunning) R.drawable.ic_pause else R.drawable.ic_play_arrow),
-                contentDescription = "play and pause",
-                tint = Color.Black
-            )
-        }
-        IconButton(
+                .clip(CircleShape),
+            containerColor = LightViolet
+        )
+
+        MyFloatingActionButton(
             onClick = onLapClick,
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_stopwatch),
             modifier = Modifier
                 .size(60.dp)
                 .clip(CircleShape)
-                .alpha(if (isStopwatchRunning) 1f else 0f)
-                .background(color = Purple)
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_stopwatch),
-                contentDescription = "lap"
-            )
-        }
+                .alpha(if (isStopwatchRunning) 1f else 0f),
+            containerColor = Purple
+        )
     }
 }

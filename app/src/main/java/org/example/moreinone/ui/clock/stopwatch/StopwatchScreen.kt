@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -36,11 +37,10 @@ fun StopwatchScreen() {
 
     // Increase milliseconds when the stopwatch is running
     LaunchedEffect(isStopwatchRunning.value) {
-        while (isStopwatchRunning.value) {
-            delay(10) // Delay for 10 millisecond
-            elapsedTime.longValue += 1 // Increment milliseconds by 1
-            if (!isStopwatchRunning.value) {
-                elapsedTime.longValue = 0L // Reset elapsedTime
+        if (isStopwatchRunning.value) {
+            while (isStopwatchRunning.value) {
+                delay(10) // Delay for 10 millisecond
+                elapsedTime.longValue += 1 // Increment milliseconds by 1
             }
         }
     }
@@ -62,7 +62,26 @@ fun StopwatchScreen() {
                     )
                 )
             })
-        }
+        },
+        floatingActionButton = {
+            StopwatchControls(
+                isStopwatchRunning = isStopwatchRunning.value,
+                elapsedTime = elapsedTime.longValue,
+                onResetClick = {
+                    isStopwatchRunning.value = false
+                    lapList.clear() // Reset lap list
+                    elapsedTime.longValue = 0L // Reset elapsedTime
+                },
+                onPlayPauseClick = {
+                    isStopwatchRunning.value = !isStopwatchRunning.value
+                },
+                onLapClick = {
+                    val lapTime = "%02d:%02d:%02d.%02d".format(hours, minutes, seconds, milliseconds)
+                    lapList.add((Pair(lapList.size + 1, lapTime)))
+                }
+            )
+        },
+        floatingActionButtonPosition = FabPosition.Center
     ) {
         Column(
             modifier = Modifier
@@ -71,7 +90,7 @@ fun StopwatchScreen() {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.weight(0.3f))
 
             StopwatchDisplay(
                 hour = stringResource(id = R.string.hour, hours),
@@ -90,22 +109,6 @@ fun StopwatchScreen() {
             )
 
             Spacer(modifier = Modifier.weight(1f))
-
-            StopwatchControls(
-                isStopwatchRunning = isStopwatchRunning.value,
-                elapsedTime = elapsedTime.longValue,
-                onResetClick = {
-                    isStopwatchRunning.value = false
-                    lapList.clear() // Reset lap list
-                },
-                onPlayPauseClick = {
-                    isStopwatchRunning.value = !isStopwatchRunning.value
-                },
-                onLapClick = {
-                    val lapTime = "%02d:%02d:%02d.%02d".format(hours, minutes, seconds, milliseconds)
-                    lapList.add((Pair(lapList.size + 1, lapTime)))
-                }
-            )
         }
     }
 }
