@@ -36,12 +36,12 @@ import org.example.moreinone.common.utils.inlineContent
 @Composable
 fun AlarmCardView(
     alarmTime: String,
-    amPM: String
+    amPM: String,
+    switchValue: Boolean,
+    onSwitchValueChange: (Boolean) -> Unit
 ) {
 
     val isCardExpended = remember { mutableStateOf(false) }
-
-    val alarmSet = remember { mutableStateOf(false) }
 
     Card(
         onClick = {
@@ -117,9 +117,9 @@ fun AlarmCardView(
             ) {
                 SimpleText(text = "Every day")
                 Switch(
-                    checked = alarmSet.value,
+                    checked = switchValue,
                     onCheckedChange = {
-                        alarmSet.value = it
+                        onSwitchValueChange(it)
                     })
             }
 
