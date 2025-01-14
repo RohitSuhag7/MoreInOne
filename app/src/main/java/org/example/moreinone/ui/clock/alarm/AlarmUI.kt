@@ -35,6 +35,8 @@ import org.example.moreinone.common.utils.inlineContent
 
 @Composable
 fun AlarmCardView(
+    alarmLabel: String,
+    onLabelClick: () -> Unit,
     alarmTime: String,
     amPM: String,
     switchValue: Boolean,
@@ -62,8 +64,11 @@ fun AlarmCardView(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = dynamicAnnotatedString("Add Label"),
-                    inlineContent = inlineContent(painterIcon = painterResource(id = R.drawable.ic_label))
+                    text = dynamicAnnotatedString(alarmLabel),
+                    inlineContent = inlineContent(painterIcon = painterResource(id = R.drawable.ic_label)),
+                    modifier = Modifier.clickable {
+                        onLabelClick()
+                    }
                 )
                 if (isCardExpended.value) {
                     Icon(

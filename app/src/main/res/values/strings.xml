@@ -46,4 +46,6 @@
     <string name="minutes">%1$s:</string>
     <string name="seconds">%1$s</string>
     <string name="milliseconds">%1$s</string>
+    <string name="add_label">Add Label</string>
+    <string name="label">Label</string>
 </resources>
