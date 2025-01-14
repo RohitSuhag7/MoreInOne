@@ -39,6 +39,8 @@ fun AlarmScreen() {
 
     val openLabelDialog = remember { mutableStateOf(false) }
 
+    val openTimeDialog = remember { mutableStateOf(false) }
+
     Scaffold(
         topBar = {
             TopAppBar(title = {
@@ -53,7 +55,9 @@ fun AlarmScreen() {
         },
         floatingActionButton = {
             MyFloatingActionButton(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    openTimeDialog.value = true
+                },
                 imageVector = Icons.Filled.Add,
                 modifier = Modifier
                     .size(100.dp)
@@ -101,6 +105,12 @@ fun AlarmScreen() {
                 },
                 labelValue = stringResource(id = R.string.label)
             )
+        }
+
+        if (openTimeDialog.value) {
+            SetAlarm {
+                openTimeDialog.value = false
+            }
         }
     }
 }
