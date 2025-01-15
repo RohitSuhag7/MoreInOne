@@ -1,5 +1,7 @@
 package org.example.moreinone.ui.clock.alarm
 
+import android.icu.util.Calendar
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -11,7 +13,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -40,6 +44,12 @@ fun AlarmScreen() {
     val openLabelDialog = remember { mutableStateOf(false) }
 
     val openTimeDialog = remember { mutableStateOf(false) }
+    val timePickerState = rememberTimePickerState()
+
+    val alarmTime = remember { mutableStateOf("") }
+    val activateSetAlarm = remember { mutableStateOf(false) }
+
+    val alarmDayList = remember { mutableStateListOf<String>() }
 
     Scaffold(
         topBar = {
@@ -81,11 +91,18 @@ fun AlarmScreen() {
                 },
                 alarmTime = "6:00",
                 amPM = "am",
-                switchValue = false,
-                onSwitchValueChange = {})
+                onSetAlarmClick = {
+                    openTimeDialog.value = true
+                },
+                switchValue = activateSetAlarm.value,
+                onSwitchValueChange = { v ->
+                    activateSetAlarm.value = v
+                },
+                alarmDayList = alarmDayList
+            )
         }
 
-        // Open Dialog
+        // Open Label Dialog
         if (openLabelDialog.value) {
             CustomDialogWithTextField(
                 onDismissRequest = {
@@ -107,10 +124,24 @@ fun AlarmScreen() {
             )
         }
 
+        // Open Alarm Scheduler Dialog
         if (openTimeDialog.value) {
-            SetAlarm {
-                openTimeDialog.value = false
-            }
+            SetAlarm(
+                onDismiss = {
+                    openTimeDialog.value = false
+                },
+                onConfirmClick = {
+                    openTimeDialog.value = false
+                    activateSetAlarm.value = true
+                    val calendar = Calendar.getInstance()
+                    calendar.set(Calendar.HOUR_OF_DAY, timePickerState.hour)
+                    calendar.set(Calendar.MINUTE, timePickerState.minute)
+
+                    alarmTime.value = calendar.time.time.toString()
+                    Log.d("Alarm Time", "AlarmScreen: ${alarmTime.value}")
+                },
+                timePickerState = timePickerState
+            )
         }
     }
 }

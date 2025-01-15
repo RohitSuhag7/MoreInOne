@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,11 +40,22 @@ fun AlarmCardView(
     onLabelClick: () -> Unit,
     alarmTime: String,
     amPM: String,
+    onSetAlarmClick: () -> Unit,
     switchValue: Boolean,
-    onSwitchValueChange: (Boolean) -> Unit
+    onSwitchValueChange: (Boolean) -> Unit,
+    alarmDayList: MutableList<String>
 ) {
 
     val isCardExpended = remember { mutableStateOf(false) }
+
+    // Function to get the display text for selected days
+    val dayText = if (alarmDayList.isEmpty()) {
+        stringResource(id = R.string.not_scheduled)
+    } else if (alarmDayList.size == 7) {
+        stringResource(id = R.string.every_day)
+    } else {
+        alarmDayList.joinToString(", ")
+    }
 
     Card(
         onClick = {
@@ -89,7 +101,10 @@ fun AlarmCardView(
                         painter = painterResource(id = R.drawable.ic_arrow_down),
                         contentDescription = "drop down",
                         modifier = Modifier
-                            .background(color = Color.Gray, shape = CircleShape)
+                            .background(
+                                color = Color.Gray,
+                                shape = CircleShape
+                            )
                             .clickable {
                                 isCardExpended.value = true
                             },
@@ -105,12 +120,18 @@ fun AlarmCardView(
             ) {
                 SimpleText(
                     text = alarmTime,
-                    textStyle = TextStyle(fontSize = 40.sp)
+                    textStyle = TextStyle(fontSize = 40.sp),
+                    modifier = Modifier.clickable {
+                        onSetAlarmClick()
+                    }
                 )
                 SimpleText(
                     text = amPM,
                     modifier = Modifier
                         .padding(horizontal = 2.dp)
+                        .clickable {
+                            onSetAlarmClick()
+                        }
                 )
             }
 
@@ -120,7 +141,7 @@ fun AlarmCardView(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                SimpleText(text = "Every day")
+                SimpleText(text = dayText)
                 Switch(
                     checked = switchValue,
                     onCheckedChange = {
@@ -129,15 +150,20 @@ fun AlarmCardView(
             }
 
             if (isCardExpended.value) {
-                CardExpended()
+                CardExpended(alarmDay = alarmDayList)
             }
         }
     }
 }
 
 @Composable
-fun CardExpended() {
-    val weeksList = listOf('S', 'M', 'T', 'W', 'T', 'F', 'S')
+fun CardExpended(alarmDay: MutableList<String>) {
+    val weekdaysOrder = listOf("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
+
+    val weeksList = listOf(
+        "Sun" to "S", "Mon" to "M", "Tue" to "T", "Wed" to "W",
+        "Thu" to "T", "Fri" to "F", "Sat" to "S"
+    )
 
     LazyRow(
         modifier = Modifier
@@ -147,6 +173,7 @@ fun CardExpended() {
         verticalAlignment = Alignment.CenterVertically
     ) {
         items(weeksList.size) { day ->
+            val (fullDayName, shortDayName) = weeksList[day]
             Box(
                 modifier = Modifier
                     .size(35.dp)
@@ -156,24 +183,36 @@ fun CardExpended() {
                         shape = CircleShape
                     )
                     .background(
-                        color = Color.Unspecified,
+                        color = if (alarmDay.contains(fullDayName)) Color.White else Color.Unspecified,
                         shape = CircleShape
                     ),
                 contentAlignment = Alignment.Center
             ) {
                 SimpleText(
-                    text = weeksList[day].toString(),
+                    text = shortDayName,
                     modifier = Modifier
                         .align(Alignment.Center)
-                        .padding(8.dp),
-                    textStyle = TextStyle(fontSize = 16.sp)
+                        .padding(8.dp)
+                        .clickable {
+                            if (alarmDay.contains(fullDayName)) {
+                                alarmDay.remove(fullDayName)
+                            } else {
+                                alarmDay.add(fullDayName)
+                            }
+                            // Sort the days based on weekdaysOrder to always display in series
+                            alarmDay.sortBy { weekdaysOrder.indexOf(it) }
+                        },
+                    textStyle = TextStyle(
+                        fontSize = 16.sp,
+                        color = if (alarmDay.contains(fullDayName)) Color.Black else Color.Unspecified
+                    )
                 )
             }
         }
     }
 
     Text(
-        text = dynamicAnnotatedString(label = "Delete"),
+        text = dynamicAnnotatedString(label = stringResource(id = R.string.delete)),
         inlineContent = inlineContent(painterIcon = painterResource(id = R.drawable.ic_delete)),
         color = Color.White,
         modifier = Modifier.padding(top = 8.dp)

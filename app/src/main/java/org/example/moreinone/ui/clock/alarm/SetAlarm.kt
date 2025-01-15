@@ -11,7 +11,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimeInput
 import androidx.compose.material3.TimePicker
-import androidx.compose.material3.rememberTimePickerState
+import androidx.compose.material3.TimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,10 +25,13 @@ import org.example.moreinone.common.utils.SimpleText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SetAlarm(onDismiss: () -> Unit) {
+fun SetAlarm(
+    onDismiss: () -> Unit,
+    onConfirmClick: () -> Unit,
+    timePickerState: TimePickerState
+) {
 
     val timePicker = remember { mutableStateOf(true) }
-    val timePickerState = rememberTimePickerState()
 
     DatePickerDialog(
         onDismissRequest = onDismiss,
@@ -64,7 +67,7 @@ fun SetAlarm(onDismiss: () -> Unit) {
                     SimpleText(text = stringResource(id = R.string.cancel))
                 }
 
-                TextButton(onClick = { /*TODO*/ }) {
+                TextButton(onClick = onConfirmClick) {
                     SimpleText(text = stringResource(id = R.string.ok))
                 }
             }
