@@ -7,10 +7,12 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import org.example.moreinone.model.dao.AlarmDao
 import org.example.moreinone.model.dao.NotesDao
 import org.example.moreinone.model.dao.TodoDao
 import org.example.moreinone.model.dao.SettingsDao
 import org.example.moreinone.model.database.LocalDatabase
+import org.example.moreinone.repository.AlarmRepository
 import org.example.moreinone.repository.MoreInOneRepository
 import org.example.moreinone.repository.NotesRepository
 import org.example.moreinone.repository.TodoRepository
@@ -54,4 +56,12 @@ object AppModule {
     @Provides
     @Singleton
     fun provideNotesRepository(notesDao: NotesDao): NotesRepository = NotesRepository(notesDao)
+
+    @Provides
+    @Singleton
+    fun provideAlarmDao(localDB: LocalDatabase): AlarmDao = localDB.alarmDao()
+
+    @Provides
+    @Singleton
+    fun provideAlarmRepository(alarmDao: AlarmDao): AlarmRepository = AlarmRepository(alarmDao)
 }

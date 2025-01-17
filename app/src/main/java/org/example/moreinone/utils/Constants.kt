@@ -5,6 +5,7 @@ object Constants {
     const val TODO_TABLE = "todo_table"
     const val SETTINGS_TABLE = "settings_table"
     const val NOTES_TABLE = "notes_table"
+    const val ALARM_TABLE = "alarm_table"
 
     const val HOME_SCREEN = "home_screen"
     const val TASK_LIST_SCREEN = "task_list_screen"

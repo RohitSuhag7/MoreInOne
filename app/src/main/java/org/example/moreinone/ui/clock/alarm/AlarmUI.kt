@@ -43,6 +43,7 @@ fun AlarmCardView(
     onSetAlarmClick: () -> Unit,
     switchValue: Boolean,
     onSwitchValueChange: (Boolean) -> Unit,
+    onDeleteClick: () -> Unit,
     alarmDayList: MutableList<String>
 ) {
 
@@ -62,7 +63,8 @@ fun AlarmCardView(
             isCardExpended.value = !isCardExpended.value
         },
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
@@ -77,6 +79,7 @@ fun AlarmCardView(
             ) {
                 Text(
                     text = dynamicAnnotatedString(alarmLabel),
+                    style = TextStyle(color = if (switchValue) Color.White else Color.Unspecified),
                     inlineContent = inlineContent(painterIcon = painterResource(id = R.drawable.ic_label)),
                     modifier = Modifier.clickable {
                         onLabelClick()
@@ -120,13 +123,17 @@ fun AlarmCardView(
             ) {
                 SimpleText(
                     text = alarmTime,
-                    textStyle = TextStyle(fontSize = 40.sp),
+                    textStyle = TextStyle(
+                        fontSize = 40.sp,
+                        color = if (switchValue) Color.White else Color.Unspecified
+                    ),
                     modifier = Modifier.clickable {
                         onSetAlarmClick()
                     }
                 )
                 SimpleText(
                     text = amPM,
+                    textStyle = TextStyle(color = if (switchValue) Color.White else Color.Unspecified),
                     modifier = Modifier
                         .padding(horizontal = 2.dp)
                         .clickable {
@@ -141,7 +148,10 @@ fun AlarmCardView(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                SimpleText(text = dayText)
+                SimpleText(
+                    text = dayText,
+                    textStyle = TextStyle(color = if (switchValue) Color.White else Color.Unspecified)
+                )
                 Switch(
                     checked = switchValue,
                     onCheckedChange = {
@@ -150,14 +160,14 @@ fun AlarmCardView(
             }
 
             if (isCardExpended.value) {
-                CardExpended(alarmDay = alarmDayList)
+                CardExpended(alarmDay = alarmDayList, onDeleteClick)
             }
         }
     }
 }
 
 @Composable
-fun CardExpended(alarmDay: MutableList<String>) {
+fun CardExpended(alarmDay: MutableList<String>, onDeleteClick: () -> Unit) {
     val weekdaysOrder = listOf("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
 
     val weeksList = listOf(
@@ -216,5 +226,8 @@ fun CardExpended(alarmDay: MutableList<String>) {
         inlineContent = inlineContent(painterIcon = painterResource(id = R.drawable.ic_delete)),
         color = Color.White,
         modifier = Modifier.padding(top = 8.dp)
+            .clickable {
+                onDeleteClick()
+            }
     )
 }

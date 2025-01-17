@@ -98,6 +98,9 @@ fun AlarmScreen() {
                 onSwitchValueChange = { v ->
                     activateSetAlarm.value = v
                 },
+                onDeleteClick = {
+                    //TODO delete functionality
+                },
                 alarmDayList = alarmDayList
             )
         }

@@ -74,7 +74,8 @@ fun CustomDialogWithTextField(
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color.Cyan
                     ),
-                    modifier = Modifier.focusRequester(focusRequester)
+                    modifier = Modifier.focusRequester(focusRequester),
+                    maxLines = 1
                 )
 
                 Row(
