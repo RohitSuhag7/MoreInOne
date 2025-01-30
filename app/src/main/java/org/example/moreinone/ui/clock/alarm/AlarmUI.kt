@@ -77,22 +77,19 @@ fun AlarmCardView(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(
-                    text = dynamicAnnotatedString(alarmLabel),
+                Text(text = dynamicAnnotatedString(alarmLabel),
                     style = TextStyle(color = if (switchValue) Color.White else Color.Unspecified),
                     inlineContent = inlineContent(painterIcon = painterResource(id = R.drawable.ic_label)),
                     modifier = Modifier.clickable {
                         onLabelClick()
-                    }
-                )
+                    })
                 if (isCardExpended.value) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_arrow_up),
                         contentDescription = "drop up",
                         modifier = Modifier
                             .background(
-                                color = Color.Gray,
-                                shape = CircleShape
+                                color = Color.Gray, shape = CircleShape
                             )
                             .clickable {
                                 isCardExpended.value = false
@@ -105,8 +102,7 @@ fun AlarmCardView(
                         contentDescription = "drop down",
                         modifier = Modifier
                             .background(
-                                color = Color.Gray,
-                                shape = CircleShape
+                                color = Color.Gray, shape = CircleShape
                             )
                             .clickable {
                                 isCardExpended.value = true
@@ -121,30 +117,23 @@ fun AlarmCardView(
                     .fillMaxWidth()
                     .padding(vertical = 12.dp)
             ) {
-                SimpleText(
-                    text = alarmTime,
-                    textStyle = TextStyle(
-                        fontSize = 40.sp,
-                        color = if (switchValue) Color.White else Color.Unspecified
-                    ),
-                    modifier = Modifier.clickable {
-                        onSetAlarmClick()
-                    }
-                )
-                SimpleText(
-                    text = amPM,
+                SimpleText(text = alarmTime, textStyle = TextStyle(
+                    fontSize = 40.sp,
+                    color = if (switchValue) Color.White else Color.Unspecified
+                ), modifier = Modifier.clickable {
+                    onSetAlarmClick()
+                })
+                SimpleText(text = amPM,
                     textStyle = TextStyle(color = if (switchValue) Color.White else Color.Unspecified),
                     modifier = Modifier
                         .padding(horizontal = 2.dp)
                         .clickable {
                             onSetAlarmClick()
-                        }
-                )
+                        })
             }
 
             Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
@@ -152,27 +141,36 @@ fun AlarmCardView(
                     text = dayText,
                     textStyle = TextStyle(color = if (switchValue) Color.White else Color.Unspecified)
                 )
-                Switch(
-                    checked = switchValue,
-                    onCheckedChange = {
-                        onSwitchValueChange(it)
-                    })
+                Switch(checked = switchValue, onCheckedChange = {
+                    onSwitchValueChange(it)
+                })
             }
 
             if (isCardExpended.value) {
-                CardExpended(alarmDay = alarmDayList, onDeleteClick)
+                CardExpended(
+                    alarmDay = alarmDayList,
+                    onDeleteClick = onDeleteClick
+                )
             }
         }
     }
 }
 
 @Composable
-fun CardExpended(alarmDay: MutableList<String>, onDeleteClick: () -> Unit) {
+fun CardExpended(
+    alarmDay: MutableList<String>,
+    onDeleteClick: () -> Unit
+) {
     val weekdaysOrder = listOf("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
 
     val weeksList = listOf(
-        "Sun" to "S", "Mon" to "M", "Tue" to "T", "Wed" to "W",
-        "Thu" to "T", "Fri" to "F", "Sat" to "S"
+        "Sun" to "S",
+        "Mon" to "M",
+        "Tue" to "T",
+        "Wed" to "W",
+        "Thu" to "T",
+        "Fri" to "F",
+        "Sat" to "S"
     )
 
     LazyRow(
@@ -188,15 +186,12 @@ fun CardExpended(alarmDay: MutableList<String>, onDeleteClick: () -> Unit) {
                 modifier = Modifier
                     .size(35.dp)
                     .border(
-                        width = 2.dp,
-                        color = Color.Gray,
-                        shape = CircleShape
+                        width = 2.dp, color = Color.Gray, shape = CircleShape
                     )
                     .background(
                         color = if (alarmDay.contains(fullDayName)) Color.White else Color.Unspecified,
                         shape = CircleShape
-                    ),
-                contentAlignment = Alignment.Center
+                    ), contentAlignment = Alignment.Center
             ) {
                 SimpleText(
                     text = shortDayName,
@@ -209,6 +204,7 @@ fun CardExpended(alarmDay: MutableList<String>, onDeleteClick: () -> Unit) {
                             } else {
                                 alarmDay.add(fullDayName)
                             }
+
                             // Sort the days based on weekdaysOrder to always display in series
                             alarmDay.sortBy { weekdaysOrder.indexOf(it) }
                         },
@@ -221,13 +217,12 @@ fun CardExpended(alarmDay: MutableList<String>, onDeleteClick: () -> Unit) {
         }
     }
 
-    Text(
-        text = dynamicAnnotatedString(label = stringResource(id = R.string.delete)),
+    Text(text = dynamicAnnotatedString(label = stringResource(id = R.string.delete)),
         inlineContent = inlineContent(painterIcon = painterResource(id = R.drawable.ic_delete)),
         color = Color.White,
-        modifier = Modifier.padding(top = 8.dp)
+        modifier = Modifier
+            .padding(top = 8.dp)
             .clickable {
                 onDeleteClick()
-            }
-    )
+            })
 }
